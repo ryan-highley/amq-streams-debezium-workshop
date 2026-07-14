@@ -16,9 +16,9 @@ tabs:
   #   url: 'https://console-openshift-console.${DOMAIN}'
 
   # Single terminal
-  # - name: Bastion
-  #   path: /wetty
-  #   port: 443
+  - name: Bastion
+    path: /wetty
+    port: 443
 
   # Vertical split terminals
   # - name: Bastion
@@ -29,5 +29,5 @@ tabs:
   #   secondary_port: 443
 
   # External page
-  - name: Antora
-    url: 'https://antora.org'
+  # - name: Antora
+  #   url: 'https://antora.org'

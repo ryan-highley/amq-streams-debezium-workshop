@@ -1,5 +1,5 @@
 name: modules
-title: Showroom Collection
+title: AMQ Streams and Debezium Workshop
 version: ~
 nav:
   - modules/ROOT/nav.adoc
@@ -14,5 +14,14 @@ asciidoc:
     bastion_ssh_user_name: lab-user
     bastion_ssh_password: password
     ssh_user: lab-user
+    ssh_password: password
     openshift_console_url: https://console-openshift-console.apps.cluster-abc123.ocpv00.rhdp.net
     openshift_cluster_ingress_domain: apps.cluster-abc123.ocpv00.rhdp.net
+
+    release-version: master
+    ssh_command: ssh someone@example.com
+    page-links:
+    - url: https://redhat.com
+      text: Red Hat
+    streams: Red Hat Streams for Apache Kafka
+    registry: Red Hat build of Apicurio Registry

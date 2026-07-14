@@ -1,7 +1,7 @@
 ---
 site:
-  title: Showroom Template Demo
-  url: https://github.com/rhpds/showroom_template_nookbag
+  title: Red Hat AMQ Streams and Debezium Workshop
+  url: https://github.com/ryan-highley/amq-streams-debezium-workshop
   start_page: modules::index.adoc
 
 content:
@@ -13,9 +13,13 @@ ui:
   bundle:
     url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/latest/ui-bundle.zip
     snapshot: true
+  supplemental_files:
+    - path: ./content/lib
 
 antora:
   extensions:
+    - require: ./content/lib/dev-mode.js
+      enabled: true
     - require: '@sntke/antora-mermaid-extension'
       mermaid_library_url: https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs
       script_stem: header-scripts
