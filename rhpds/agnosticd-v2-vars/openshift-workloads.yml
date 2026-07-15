@@ -98,11 +98,11 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom_user_data_seed
 # -------------------------------------------------------------------
-ocp4_workload_showroom_user_data_seed:
-  openshift_console_url: https://console-openshift-console.apps.local-lab.ocp.highley.net
-  users:
-    user1:
-      password:
+# ocp4_workload_showroom_user_data_seed:
+#   openshift_console_url: https://console-openshift-console.apps.local-lab.ocp.highley.net
+#   users:
+#     user1:
+#       password: ''
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
