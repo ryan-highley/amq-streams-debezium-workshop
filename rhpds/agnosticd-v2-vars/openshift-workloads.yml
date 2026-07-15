@@ -64,6 +64,7 @@ workloads:
 # - agnosticd.core_workloads.ocp4_workload_cert_manager
 # - agnosticd.core_workloads.ocp4_workload_amq_streams
 # - agnosticd.core_workloads.ocp4_workload_openshift_gitops
+# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.showroom.ocp4_workload_showroom
 
@@ -95,14 +96,19 @@ ocp4_workload_amq_streams_operator_namespace: openshift-operators
 ocp4_workload_amq_streams_channel: stable
 
 # -------------------------------------------------------------------
+# Workload: ocp4_workload_showroom_user_data_seed
+# -------------------------------------------------------------------
+ocp4_workload_showroom_user_data_seed:
+  openshift_console_url: https://console-openshift-console.apps.local-lab.ocp.highley.net
+  users:
+    user1:
+      password:
+
+# -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
 # -------------------------------------------------------------------
-# ocp4_workload_showroom_content_git_repo: https://github.com/ryan-highley/amq-streams-debezium-workshop
-# ocp4_workload_showroom_content_git_repo: https://rhighley-thinkpadp1gen4i.remote.csb:3000/rhighley/amq-streams-debezium-workshop
-# ocp4_workload_showroom_content_git_repo_ref: bcbs-sc-training
-
-ocp4_workload_showroom_content_git_repo: https://github.com/rhpds/showroom_template_nookbag.git
-ocp4_workload_showroom_content_git_repo_ref: ocp-example
+ocp4_workload_showroom_content_git_repo: https://github.com/ryan-highley/amq-streams-debezium-workshop
+ocp4_workload_showroom_content_git_repo_ref: bcbs-sc-training
 
 ocp4_workload_showroom_content_antora_playbook: site.yml
 
@@ -110,3 +116,4 @@ ocp4_workload_showroom_content_only: false
 
 ocp4_workload_showroom_terminal_type: showroom
 ocp4_workload_showroom_terminal_image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
+ocp4_workload_showroom_second_terminal_tab_enable: true

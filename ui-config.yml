@@ -12,11 +12,11 @@ view_switcher:
 
 tabs:
   # OCP Console
-  # - name: OCP Console
-  #   url: 'https://console-openshift-console.${DOMAIN}'
+  - name: OCP Console
+    url: 'https://console-openshift-console.${DOMAIN}'
 
   # Single terminal
-  - name: Bastion
+  - name: Terminal
     path: /wetty
     port: 443
 
@@ -29,5 +29,5 @@ tabs:
   #   secondary_port: 443
 
   # External page
-  # - name: Antora
-  #   url: 'https://antora.org'
+  - name: Red Hat Documentation
+    url: 'https://docs.redhat.com/en/documentation'
