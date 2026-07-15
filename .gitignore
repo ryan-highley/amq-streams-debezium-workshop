@@ -36,3 +36,10 @@ package-lock.json
 
 # Ignore yarn.lock for Yarn
 yarn.lock
+
+# Ignore agnosticd-v2 git repo and Python3 venv
+rhpds/agnosticd-v2
+rhpds/agnosticd-v2-virtualenv
+
+# Ignore agnosticd-v2 output
+rhpds/agnosticd-v2-output

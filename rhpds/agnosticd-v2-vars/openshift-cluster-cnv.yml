@@ -1,0 +1,127 @@
+---
+# ===================================================================
+# Mandatory Variables
+# ===================================================================
+# Repository Tag
+# Tag for all repositories that are used in this config.
+# ===================================================================
+tag: main
+# -------------------------------------------------------------------
+cloud_provider: openshift_cnv
+cloud_provider_version: "{{ tag }}"
+config: openshift-cluster
+# ===================================================================
+# End Mandatory Variables
+# ===================================================================
+
+# ===================================================================
+# Additional Collections & roles to be installed for this config
+# ===================================================================
+requirements_content:
+  collections:
+  # Assisted Installer Collection
+  - name: https://github.com/rhpds/assisted_installer.git
+    type: git
+    version: v0.0.8
+
+  # Core OpenShift Workloads
+  - name: https://github.com/rhpds/core_workloads.git
+    type: git
+    version: "{{ tag }}"
+
+# ===================================================================
+# CNV Specific settings
+#     See ansible/configs/openshift-cluster/default_vars_cnv.yml for
+#     available variables
+# ===================================================================
+
+# Replace owner with your e-mail address
+cloud_tags:
+- owner: wkulhane@redhat.com
+- Purpose: development
+- config: "{{ config }}"
+- guid: "{{ guid }}"
+
+# ===================================================================
+# OpenShift cluster specific settings
+#     See ansible/configs/openshift-cluster/default_vars.yml
+#     and ansible/configs/{{ cloud_provider }}/default_vars for
+#     available variables
+# ===================================================================
+
+# -------------------------------------------------------------------
+# Set authorized keys on all created instances
+# -------------------------------------------------------------------
+# Replace with your SSH key on Github
+host_ssh_authorized_keys:
+- key: https://github.com/wkulhanek.keys
+
+# -------------------------------------------------------------------
+# Bastion VM settings
+# -------------------------------------------------------------------
+
+# Create a student user
+bastion_setup_student_user: true
+bastion_student_user_name: student
+
+# -------------------------------------------------------------------
+# Bastion VM repositories (set credentials accordingly in secrets.yml)
+# -------------------------------------------------------------------
+install_satellite_repositories: true
+install_rhn_repositories: false
+
+# -------------------------------------------------------------------
+# OpenShift settings
+# -------------------------------------------------------------------
+cluster_name: ocp
+
+cluster_dns_zone: dynamic.redhatworkshops.io
+  
+host_ocp4_installer_root_url: https://mirror.openshift.com/pub/openshift-v4/clients
+host_ocp4_installer_version: "4.19"
+host_ocp4_deploy_installation_method: openshift_assisted
+
+# Save kubeadmin password in user data - only necessary if
+# no authentication is set up for the cluster
+host_ocp4_installer_set_user_data_kubeadmin_password: true
+
+openshift_cluster_admin_service_account_enable: true
+
+# ===================================================================
+# List of workloads to be deployed
+# ===================================================================
+workloads:
+- agnosticd.core_workloads.ocp4_workload_external_odf
+- agnosticd.core_workloads.ocp4_workload_cert_manager
+- agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
+
+# ===================================================================
+# Variables for specific workloads
+# ===================================================================
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_external_odf
+# -------------------------------------------------------------------
+ocp4_workload_external_odf_channel: stable-4.18
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_cert_manager
+# -------------------------------------------------------------------
+ocp4_workload_cert_manager_channel: stable-v1
+
+ocp4_workload_cert_manager_aws_region: us-east-2
+ocp4_workload_cert_manager_aws_access_key_id: "{{ route53_aws_access_key_id }}"
+ocp4_workload_cert_manager_aws_secret_access_key: "{{ route53_aws_secret_access_key }}"
+ocp4_workload_cert_manager_aws_hostedzoneid: "{{ route53_aws_zone_id }}"
+
+ocp4_workload_cert_manager_use_catalog_snapshot: false
+
+ocp4_workload_cert_manager_install_ingress_certificates: true
+ocp4_workload_cert_manager_install_api_certificates: false
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_authentication_htpasswd
+# -------------------------------------------------------------------
+ocp4_workload_authentication_htpasswd_user_count: 2
+ocp4_workload_authentication_htpasswd_user_password_randomized: true
+ocp4_workload_authentication_htpasswd_admin_user: wkadmin

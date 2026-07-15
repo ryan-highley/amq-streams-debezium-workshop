@@ -1,0 +1,71 @@
+---
+# ===================================================================
+# Mandatory Variables
+# ===================================================================
+# Repository Tag
+# Tag for all repositories that are used in this config.
+# ===================================================================
+tag: main
+# -------------------------------------------------------------------
+cloud_provider: none
+config: openshift-workloads
+# ===================================================================
+# End Mandatory Variables
+# ===================================================================
+
+# ===================================================================
+# Additional Collections & roles to be installed for this config
+# ===================================================================
+requirements_content:
+  collections:
+  # Core OpenShift Workloads
+  - name: https://github.com/rhpds/core_workloads.git
+    type: git
+    version: "{{ tag }}"
+
+# ===================================================================
+# List of clusters with credentials. Credentials come from secrets
+# or from Babylon
+# ===================================================================
+clusters:
+- default:
+    api_url: "{{ cluster1.sandbox_openshift_api_url }}"
+    api_token: "{{ cluster1.sandbox_openshift_api_token }}"
+
+# ===================================================================
+# List of workloads to apply to clusters with cluster selector
+# ===================================================================
+
+# If no clusters are specified then the default cluster is used.
+# If clusters are specified cluster names must match a cluster in the list of clusters
+#
+# workloads:
+# - name: agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
+#   clusters:
+#   - openshift_app
+#   - openshift_db
+# - name: rhpds.mitzi.ocp4_workload_mitzi_app
+#   clusters:
+#   - openshift_app
+# - name: rhpds.mitzi.ocp4_workload_mitzi_db
+#   clusters:
+#   - openshift_db
+#
+# Simple example (all workloads deployed to the default cluster):
+# workloads:
+# - name: agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
+# - name: rhpds.mitzi.ocp4_workload_mitzi_app
+# - name: rhpds.mitzi.ocp4_workload_mitzi_db
+workloads:
+- agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
+
+# ===================================================================
+# Variables for specific workloads
+# ===================================================================
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_authentication_htpasswd
+# -------------------------------------------------------------------
+ocp4_workload_authentication_htpasswd_user_count: 2
+ocp4_workload_authentication_htpasswd_user_password_randomized: true
+ocp4_workload_authentication_htpasswd_admin_user: wkadmin
