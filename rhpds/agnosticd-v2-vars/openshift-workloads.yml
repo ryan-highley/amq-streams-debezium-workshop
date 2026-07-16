@@ -115,8 +115,8 @@ ocp4_workload_showroom_content_antora_playbook: site.yml
 ocp4_workload_showroom_content_only: false
 
 ocp4_workload_showroom_terminal_type: showroom
-ocp4_workload_showroom_terminal_image: quay.io/rhpds/openshift-showroom-terminal-ocp:2026-03-11
-ocp4_workload_showroom_content_ui_config: |-
+ocp4_workload_showroom_terminal_image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
+ocp4_workload_showroom_content_ui_config: |
   type: showroom
 
   # Set the left column width to 40%
@@ -139,5 +139,5 @@ ocp4_workload_showroom_content_ui_config: |-
       port: 443
 
     # External page
-    # - name: Red Hat Documentation
-    #   url: 'https://docs.redhat.com/en/documentation'
+    - name: Red Hat Documentation
+      url: 'https://docs.redhat.com/en/documentation'
