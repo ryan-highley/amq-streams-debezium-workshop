@@ -69,7 +69,7 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 ocp4_workload_showroom_user_data_seed:
   # openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
-  kafka_console_url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
+  # kafka_console_url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
   users:
     user1: {}
     user2: {}
@@ -113,7 +113,7 @@ ocp4_workload_showroom_content_ui_config: |
 
     # Kafka Console
     - name: Kafka Console
-      url: {{ kafka_console_url }}
+      url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
 
     # External page
     - name: Red Hat Documentation
