@@ -80,14 +80,13 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 ocp4_workload_showroom_user_data_seed:
   openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
-  kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
   users:
     user1:
-      env: {}
+      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
     user2:
-      env: {}
+      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
     user3:
-      env: {}
+      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
