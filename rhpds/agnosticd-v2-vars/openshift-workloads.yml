@@ -32,39 +32,19 @@ requirements_content:
 # ===================================================================
 clusters:
 - default:
-    api_url: "{{ cluster1.sandbox_openshift_api_url }}"
-    api_token: "{{ cluster1.sandbox_openshift_api_token }}"
+    api_url: "{{ redhat-cnv.sandbox_openshift_api_url }}"
+    api_token: "{{ redhat-cnv.sandbox_openshift_api_token }}"
 
 # ===================================================================
 # List of workloads to apply to clusters with cluster selector
 # ===================================================================
 
-# If no clusters are specified then the default cluster is used.
-# If clusters are specified cluster names must match a cluster in the list of clusters
-#
-# workloads:
-# - name: agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
-#   clusters:
-#   - openshift_app
-#   - openshift_db
-# - name: rhpds.mitzi.ocp4_workload_mitzi_app
-#   clusters:
-#   - openshift_app
-# - name: rhpds.mitzi.ocp4_workload_mitzi_db
-#   clusters:
-#   - openshift_db
-#
-# Simple example (all workloads deployed to the default cluster):
-# workloads:
-# - name: agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
-# - name: rhpds.mitzi.ocp4_workload_mitzi_app
-# - name: rhpds.mitzi.ocp4_workload_mitzi_db
 workloads:
-# - agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
-# - agnosticd.core_workloads.ocp4_workload_cert_manager
-# - agnosticd.core_workloads.ocp4_workload_amq_streams
-# - agnosticd.core_workloads.ocp4_workload_openshift_gitops
-# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
+- agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
+- agnosticd.core_workloads.ocp4_workload_cert_manager
+- agnosticd.core_workloads.ocp4_workload_amq_streams
+- agnosticd.core_workloads.ocp4_workload_openshift_gitops
+- agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.showroom.ocp4_workload_showroom
 
@@ -75,9 +55,9 @@ workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication_htpasswd
 # -------------------------------------------------------------------
-# ocp4_workload_authentication_htpasswd_user_count: 2
-# ocp4_workload_authentication_htpasswd_user_password_randomized: true
-# ocp4_workload_authentication_htpasswd_admin_user: wkadmin
+ocp4_workload_authentication_htpasswd_user_count: 3
+ocp4_workload_authentication_htpasswd_user_password_randomized: true
+ocp4_workload_authentication_htpasswd_admin_user: rhadmin
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_cert_manager
@@ -98,11 +78,16 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom_user_data_seed
 # -------------------------------------------------------------------
-# ocp4_workload_showroom_user_data_seed:
-#   openshift_console_url: https://console-openshift-console.apps.local-lab.ocp.highley.net
-#   users:
-#     user1:
-#       password: ''
+ocp4_workload_showroom_user_data_seed:
+  openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
+  kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
+  users:
+    user1:
+      env: {}
+    user2:
+      env: {}
+    user3:
+      env: {}
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
@@ -131,7 +116,7 @@ ocp4_workload_showroom_content_ui_config: |
   tabs:
     # OCP Console
     - name: OCP Console
-      url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
+      url: {{ openshift_console_url }}
 
     # Single terminal
     - name: Terminal
@@ -140,7 +125,7 @@ ocp4_workload_showroom_content_ui_config: |
 
     # Kafka Console
     - name: Kafka Console
-      url: https://kafka-console-showroom-{{ guid }}.{{ openshift_cluster_ingress_domain }}
+      url: {{ kafka_console_url }}
 
     # External page
     - name: Red Hat Documentation
