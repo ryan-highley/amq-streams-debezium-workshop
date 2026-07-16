@@ -41,7 +41,7 @@ clusters:
 
 workloads:
 - agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
-- agnosticd.core_workloads.ocp4_workload_cert_manager
+# - agnosticd.core_workloads.ocp4_workload_cert_manager
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
 - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
