@@ -138,6 +138,10 @@ ocp4_workload_showroom_content_ui_config: |
       path: /terminal
       port: 443
 
+    # Kafka Console
+    - name: Kafka Console
+      url: https://kafka-console-showroom-{{ guid }}.{{ openshift_cluster_ingress_domain }}
+
     # External page
     - name: Red Hat Documentation
       url: 'https://docs.redhat.com/en/documentation'
