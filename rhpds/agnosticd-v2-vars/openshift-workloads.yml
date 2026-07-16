@@ -40,11 +40,10 @@ clusters:
 # ===================================================================
 
 workloads:
-- agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
-# - agnosticd.core_workloads.ocp4_workload_cert_manager
+# - agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
-- agnosticd.showroom.ocp4_workload_showroom_user_data_seed
+# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.showroom.ocp4_workload_showroom
 
@@ -55,19 +54,9 @@ workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication_htpasswd
 # -------------------------------------------------------------------
-ocp4_workload_authentication_htpasswd_user_count: 3
-ocp4_workload_authentication_htpasswd_user_password_randomized: true
-ocp4_workload_authentication_htpasswd_admin_user: rhadmin
-
-# -------------------------------------------------------------------
-# Workload: ocp4_workload_cert_manager
-# -------------------------------------------------------------------
-ocp4_workload_cert_manager_channel: stable-v1
-
-ocp4_workload_cert_manager_use_catalog_snapshot: false
-
-ocp4_workload_cert_manager_install_ingress_certificates: true
-ocp4_workload_cert_manager_install_api_certificates: false
+# ocp4_workload_authentication_htpasswd_user_count: 3
+# ocp4_workload_authentication_htpasswd_user_password_randomized: true
+# ocp4_workload_authentication_htpasswd_admin_user: rhadmin
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
@@ -79,14 +68,12 @@ ocp4_workload_amq_streams_channel: stable
 # Workload: ocp4_workload_showroom_user_data_seed
 # -------------------------------------------------------------------
 ocp4_workload_showroom_user_data_seed:
-  openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
+  # openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
+  kafka_console_url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
   users:
-    user1:
-      kafka_console_url: https://kafka-console-showroom-user1.{{ openshift_cluster_ingress_domain }}
-    user2:
-      kafka_console_url: https://kafka-console-showroom-user2.{{ openshift_cluster_ingress_domain }}
-    user3:
-      kafka_console_url: https://kafka-console-showroom-user3.{{ openshift_cluster_ingress_domain }}
+    user1: {}
+    user2: {}
+    user3: {}
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
