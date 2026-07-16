@@ -22,6 +22,9 @@ requirements_content:
   - name: https://github.com/rhpds/core_workloads.git
     type: git
     version: "{{ tag }}"
+  - name: https://github.com/rhpds/namespaced_workloads.git
+    type: git
+    version: "{{ tag }}"
   - name: https://github.com/rhpds/showroom.git
     type: git
     version: v1.6.12
@@ -40,40 +43,36 @@ clusters:
 # ===================================================================
 
 workloads:
-# - agnosticd.core_workloads.ocp4_workload_authentication_htpasswd
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
-- agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
+- agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
+
+tenant_workloads:
+- agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
+- agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
+- agnosticd.namespaced_workloads.ocp4_workload_tenant_openshift_gitops
 - agnosticd.showroom.ocp4_workload_showroom
+
+remove_workloads:
+- agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
+
+num_users: 3
+
+tenant_user_info_data:
+  lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_console_url: https://{{ kafka_console_ingress_domain }}
 
 # ===================================================================
 # Variables for specific workloads
 # ===================================================================
 
 # -------------------------------------------------------------------
-# Workload: ocp4_workload_authentication_htpasswd
-# -------------------------------------------------------------------
-# ocp4_workload_authentication_htpasswd_user_count: 3
-# ocp4_workload_authentication_htpasswd_user_password_randomized: true
-# ocp4_workload_authentication_htpasswd_admin_user: rhadmin
-
-# -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
 # -------------------------------------------------------------------
 ocp4_workload_amq_streams_operator_namespace: openshift-operators
 ocp4_workload_amq_streams_channel: stable
-
-# -------------------------------------------------------------------
-# Workload: ocp4_workload_showroom_user_data_seed
-# -------------------------------------------------------------------
-ocp4_workload_showroom_user_data_seed:
-  # openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
-  # kafka_console_url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
-  users:
-    user1: {}
-    user2: {}
-    user3: {}
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
@@ -113,8 +112,13 @@ ocp4_workload_showroom_content_ui_config: |
 
     # Kafka Console
     - name: Kafka Console
-      url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}-{{ user }}.{{ openshift_cluster_ingress_domain }}
+      url: {{ kafka_console_url }}
 
     # External page
     - name: Red Hat Documentation
       url: 'https://docs.redhat.com/en/documentation'
+
+__meta__:
+   catalog:
+      workshop_user_mode: multi
+      workshopLabUiRedirect: true
