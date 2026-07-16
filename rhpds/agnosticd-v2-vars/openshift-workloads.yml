@@ -82,11 +82,11 @@ ocp4_workload_showroom_user_data_seed:
   openshift_console_url: https://console-openshift-console.{{ openshift_cluster_ingress_domain }}
   users:
     user1:
-      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
+      kafka_console_url: https://kafka-console-showroom-user1.{{ openshift_cluster_ingress_domain }}
     user2:
-      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
+      kafka_console_url: https://kafka-console-showroom-user2.{{ openshift_cluster_ingress_domain }}
     user3:
-      kafka_console_url: https://kafka-console-showroom-{{ user }}.{{ openshift_cluster_ingress_domain }}
+      kafka_console_url: https://kafka-console-showroom-user3.{{ openshift_cluster_ingress_domain }}
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
@@ -97,6 +97,8 @@ ocp4_workload_showroom_content_git_repo_ref: bcbs-sc-training
 ocp4_workload_showroom_content_antora_playbook: site.yml
 
 ocp4_workload_showroom_content_only: false
+
+ocp4_workload_showroom_passthrough_user_data: true
 
 ocp4_workload_showroom_terminal_type: showroom
 ocp4_workload_showroom_terminal_image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
