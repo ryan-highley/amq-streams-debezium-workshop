@@ -1,1 +1,4 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
 == Authentication providers:
