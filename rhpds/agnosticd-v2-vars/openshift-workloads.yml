@@ -113,7 +113,7 @@ ocp4_workload_showroom_content_ui_config: |
 
     # Kafka Console
     - name: Kafka Console
-      url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}.{{ openshift_cluster_ingress_domain }}
+      url: https://kafka-console-{{ ocp4_workload_showroom_namespace }}-{{ user }}.{{ openshift_cluster_ingress_domain }}
 
     # External page
     - name: Red Hat Documentation
