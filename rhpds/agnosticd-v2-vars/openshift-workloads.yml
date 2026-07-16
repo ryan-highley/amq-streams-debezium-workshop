@@ -32,8 +32,8 @@ requirements_content:
 # ===================================================================
 clusters:
 - default:
-    api_url: "{{ redhat-cnv.sandbox_openshift_api_url }}"
-    api_token: "{{ redhat-cnv.sandbox_openshift_api_token }}"
+    api_url: "{{ cluster2.sandbox_openshift_api_url }}"
+    api_token: "{{ cluster2.sandbox_openshift_api_token }}"
 
 # ===================================================================
 # List of workloads to apply to clusters with cluster selector
