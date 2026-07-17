@@ -31,7 +31,7 @@ requirements_content:
     type: git
     version: v1.6.12
   # Workshop Workloads
-  - name: git+https://github.com/ryan-highley/amq-streams-debezium-workshop.git#/workshop/workload
+  - name: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
     type: git
     version: bcbs-sc-training
 
