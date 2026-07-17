@@ -22,12 +22,18 @@ requirements_content:
   - name: https://github.com/rhpds/core_workloads.git
     type: git
     version: "{{ tag }}"
+  # Namespaced OpenShift Workloads
   - name: https://github.com/rhpds/namespaced_workloads.git
     type: git
     version: "{{ tag }}"
+  # RHPDS Showroom Workloads
   - name: https://github.com/rhpds/showroom.git
     type: git
     version: v1.6.12
+  # Workshop Workloads
+  - name: git+https://github.com/ryan-highley/amq-streams-debezium-workshop.git#/workshop
+    type: git
+    version: bcbs-sc-training
 
 # ===================================================================
 # List of clusters with credentials. Credentials come from secrets
@@ -43,8 +49,10 @@ clusters:
 # ===================================================================
 
 workloads:
+- agnosticd.core_workloads.ocp4_workload_authentication_keycloak
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
+- workshop.workloads.ocp4_workload_kafka_console
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
@@ -61,12 +69,24 @@ num_users: 3
 
 tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_console_ingress_domain: console-kafka-console.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://{{ kafka_console_ingress_domain }}
 
 # ===================================================================
 # Variables for specific workloads
 # ===================================================================
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_authentication_keycloak
+# -------------------------------------------------------------------
+ocp4_workload_authentication_keycloak_channel: stable-v26.4
+ocp4_workload_authentication_keycloak_num_users: "{{ num_users }}"
+
+ocp4_workload_authentication_keycloak_clients:
+  - clientId: kafka-console
+    secret: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=32') }}"
+    redirectUris:
+      - https://console-kafka-console.{{ openshift_cluster_ingress_domain }}/*
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
