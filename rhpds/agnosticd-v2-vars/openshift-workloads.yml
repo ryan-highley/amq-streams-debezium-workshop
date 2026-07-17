@@ -57,7 +57,7 @@ workloads:
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
 tenant_workloads:
-- agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
+# - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_openshift_gitops
 - agnosticd.showroom.ocp4_workload_showroom
@@ -65,16 +65,30 @@ tenant_workloads:
 remove_workloads:
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
+# ===================================================================
+# Variables for specific workloads
+# ===================================================================
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_multi_tenant_loop
+# -------------------------------------------------------------------
 num_users: 3
 
 tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_ingress_domain: console-kafka-console.{{ openshift_cluster_ingress_domain }}
+  kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://{{ kafka_console_ingress_domain }}
+  kafka_cluster_bootstrap_domain: "dbz-cluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-kafka.svc"
 
-# ===================================================================
-# Variables for specific workloads
-# ===================================================================
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_tenant_namespace
+# -------------------------------------------------------------------
+ocp4_workload_tenant_namespace_username: "user"
+
+ocp4_workload_tenant_namespace_suffixes:
+  - suffix: kafka
+  - suffix: dev
+  - suffix: db
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication_keycloak
