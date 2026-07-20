@@ -41,8 +41,8 @@ requirements_content:
 # ===================================================================
 clusters:
 - default:
-    api_url: "{{ cluster2.sandbox_openshift_api_url }}"
-    api_token: "{{ cluster2.sandbox_openshift_api_token }}"
+    api_url: "{{ sandbox_openshift_api_url }}"
+    api_token: "{{ sandbox_openshift_api_token }}"
 
 # ===================================================================
 # List of workloads to apply to clusters with cluster selector
@@ -56,8 +56,10 @@ workloads:
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
+num_users: 3
+
 tenant_workloads:
-# - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
+- agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_openshift_gitops
 - agnosticd.showroom.ocp4_workload_showroom
@@ -72,17 +74,29 @@ remove_workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_multi_tenant_loop
 # -------------------------------------------------------------------
-num_users: 3
-
 tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://{{ kafka_console_ingress_domain }}
   kafka_cluster_bootstrap_domain: "dbz-cluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-kafka.svc"
 
+# __meta__:
+#    catalog:
+#       workshop_user_mode: multi
+#       workshopLabUiRedirect: true
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_tenant_keycloak_user
+# -------------------------------------------------------------------
+# ocp4_workload_tenant_keycloak_user_openshift_api_url: "{{ clusters[default].api_url }}"
+# ocp4_workload_tenant_keycloak_user_openshift_api_token: "{{ clusters[default].api_token }}"
+
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_namespace
 # -------------------------------------------------------------------
+# ocp4_workload_tenant_namespace_openshift_api_url: "{{ clusters[default].api_url }}"
+# ocp4_workload_tenant_namespace_openshift_api_token: "{{ clusters[default].api_token }}"
+
 ocp4_workload_tenant_namespace_username: "user"
 
 ocp4_workload_tenant_namespace_suffixes:
@@ -151,8 +165,3 @@ ocp4_workload_showroom_content_ui_config: |
     # External page
     - name: Red Hat Documentation
       url: 'https://docs.redhat.com/en/documentation'
-
-__meta__:
-   catalog:
-      workshop_user_mode: multi
-      workshopLabUiRedirect: true
