@@ -13,6 +13,9 @@ config: openshift-workloads
 # End Mandatory Variables
 # ===================================================================
 
+workshop_gitops_repo_url: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+workshop_gitops_repo_revision: bcbs-sc-training
+
 # ===================================================================
 # Additional Collections & roles to be installed for this config
 # ===================================================================
@@ -31,9 +34,9 @@ requirements_content:
     type: git
     version: v1.6.12
   # Workshop Workloads
-  - name: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+  - name: "{{ workshop_gitops_repo_url }}"
     type: git
-    version: bcbs-sc-training
+    version: "{{ workshop_gitops_repo_revision }}"
 
 # ===================================================================
 # List of clusters with credentials. Credentials come from secrets
@@ -63,6 +66,7 @@ tenant_workloads:
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_openshift_gitops
+- workshop.workloads.ocp4_workload_tenant_argocd_app
 - agnosticd.showroom.ocp4_workload_showroom
 
 remove_workloads:
@@ -103,6 +107,17 @@ ocp4_workload_tenant_namespace_suffixes:
 # Workload: ocp4_workload_tenant_openshift_gitops
 # -------------------------------------------------------------------
 ocp4_workload_tenant_openshift_gitops_user: "{{ ocp4_workload_tenant_keycloak_username }}"
+ocp4_workload_tenant_openshift_gitops_user_cluster_resource_whitelist: []
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_tenant_argocd_app
+# -------------------------------------------------------------------
+ocp4_workload_tenant_argocd_app_gitops_repo_url: "{{ workshop_gitops_repo_url }}"
+ocp4_workload_tenant_argocd_app_gitops_repo_revision: "{{ workshop_gitops_repo_revision }}"
+ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
+ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_keycloak_username }}-app-config"
+ocp4_workload_tenant_argocd_appproject_name: "{{ ocp4_workload_tenant_openshift_gitops_user_project_prefix }}-{{ ocp4_workload_tenant_keycloak_username }}"
+ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication

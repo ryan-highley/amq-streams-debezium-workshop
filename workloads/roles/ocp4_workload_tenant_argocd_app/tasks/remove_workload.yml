@@ -1,0 +1,9 @@
+---
+# -------------------------------------------------------------------------
+# Remove Install Tenant ArgoCD App
+# -------------------------------------------------------------------------
+
+- name: Remove ArgoCD Application
+  kubernetes.core.k8s:
+    state: absent
+    template: application.yaml.j2
