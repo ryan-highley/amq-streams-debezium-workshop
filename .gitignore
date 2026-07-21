@@ -45,3 +45,8 @@ rhpds/agnosticd-v2-output/
 
 # Ignore examples
 examples/
+
+# Ignore BCBS code for now
+components/
+helm/
+scripts/
