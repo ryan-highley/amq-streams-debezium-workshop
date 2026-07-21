@@ -10,6 +10,6 @@
 ocp4_workload_tenant_argocd_app_gitops_repo_revision: "main"
 ocp4_workload_tenant_argocd_app_gitops_repo_path: ""
 
-ocp4_workload_tenant_argocd_app_namespace: "{{ ocp4_workload_tenant_openshift_gitops_namespace | default('openshift-gitops') }}"
+ocp4_workload_tenant_argocd_app_namespace: openshift-gitops
 
-ocp4_workload_tenant_argocd_appproject_name: "{{ ocp4_workload_tenant_openshift_gitops_user_project_prefix | default('default') }}"
+ocp4_workload_tenant_argocd_appproject_name: default
