@@ -81,11 +81,6 @@ tenant_user_info_data:
   kafka_console_url: https://{{ kafka_console_ingress_domain }}
   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-debezium.svc"
 
-# __meta__:
-#    catalog:
-#       workshop_user_mode: multi
-#       workshopLabUiRedirect: true
-
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
 # -------------------------------------------------------------------
@@ -96,7 +91,7 @@ ocp4_workload_tenant_keycloak_user_password: "dbztrain26"
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_namespace
 # -------------------------------------------------------------------
-ocp4_workload_tenant_namespace_username: "user"
+ocp4_workload_tenant_namespace_username: "{{ ocp4_workload_tenant_keycloak_username }}"
 
 ocp4_workload_tenant_namespace_suffixes:
   - suffix: tenant-comm-debezium
@@ -107,7 +102,7 @@ ocp4_workload_tenant_namespace_suffixes:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_openshift_gitops
 # -------------------------------------------------------------------
-ocp4_workload_tenant_openshift_gitops_user: "{{ ocp4_workload_tenant_namespace_username }}"
+ocp4_workload_tenant_openshift_gitops_user: "{{ ocp4_workload_tenant_keycloak_username }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication
@@ -133,6 +128,8 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 ocp4_workload_showroom_content_git_repo: https://github.com/ryan-highley/amq-streams-debezium-showroom.git
 ocp4_workload_showroom_content_git_repo_ref: bcbs-sc-training
+
+ocp4_workload_showroom_namespace: "{{ ocp4_workload_tenant_keycloak_username }}-showroom"
 
 ocp4_workload_showroom_content_antora_playbook: site.yml
 
@@ -166,7 +163,7 @@ ocp4_workload_showroom_content_ui_config: |
 
     # Kafka Console
     - name: Kafka Console
-      url: {{ kafka_console_url }}
+      url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
 
     # External page
     - name: Red Hat Documentation
