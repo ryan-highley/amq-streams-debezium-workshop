@@ -11,11 +11,9 @@
 - name: Read agnosticd_user_info
   agnosticd.core.agnosticd_user_info: {}
 
-- name: Write debug vars
-  ansible.builtin.template:
-    src: templates/debug_vars.yaml.j2
-    dest: debug_vars.yaml
-    mode: '0444'
+- name: Debug vars
+  ansible.builtin.debug:
+    var: vars
 
 - name: Set deployer values (always included)
   ansible.builtin.set_fact:
