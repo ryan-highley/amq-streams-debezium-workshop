@@ -8,10 +8,6 @@
     msg: "ocp4_workload_tenant_argocd_app_gitops_repo_url is required but not provided"
   when: ocp4_workload_tenant_argocd_app_gitops_repo_url == "" or ocp4_workload_tenant_argocd_app_gitops_repo_url is not defined
 
-- name: Debug vars
-  ansible.builtin.debug:
-    var: vars
-
 - name: Set deployer values (always included)
   ansible.builtin.set_fact:
     _ocp4_workload_tenant_argocd_app_deployer_values:
@@ -33,7 +29,7 @@
     _ocp4_workload_tenant_argocd_app_all_values: >-
       {{
         ocp4_workload_tenant_argocd_app_helm_values | default({})
-        | combine(_ocp4_workload_tenant_argocd_app_deployer_values))
+        | combine(_ocp4_workload_tenant_argocd_app_deployer_values)
       }}
 
 - name: Debug final Helm values
