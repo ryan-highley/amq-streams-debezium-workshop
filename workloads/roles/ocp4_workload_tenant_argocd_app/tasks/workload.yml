@@ -8,6 +8,13 @@
     msg: "ocp4_workload_tenant_argocd_app_gitops_repo_url is required but not provided"
   when: ocp4_workload_tenant_argocd_app_gitops_repo_url == "" or ocp4_workload_tenant_argocd_app_gitops_repo_url is not defined
 
+- name: Read agnosticd_user_info
+  agnosticd.core.agnosticd_user_info: {}
+
+- name: Debug vars
+  ansible.builtin.debug:
+    var: vars
+
 - name: Set deployer values (always included)
   ansible.builtin.set_fact:
     _ocp4_workload_tenant_argocd_app_deployer_values:
