@@ -116,7 +116,7 @@ ocp4_workload_tenant_argocd_app_gitops_repo_url: "{{ workshop_gitops_repo_url }}
 ocp4_workload_tenant_argocd_app_gitops_repo_revision: "{{ workshop_gitops_repo_revision }}"
 ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
 ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_keycloak_username }}-app-config"
-ocp4_workload_tenant_argocd_appproject_name: "{{ openshift_gitops_appproject }}"
+ocp4_workload_tenant_argocd_appproject_name: "{{ lookup('agnosticd_user_data', 'openshift_gitops_appproject') }}"
 ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"
 
 # -------------------------------------------------------------------
