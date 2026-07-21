@@ -49,9 +49,10 @@ clusters:
 # ===================================================================
 
 workloads:
-- agnosticd.core_workloads.ocp4_workload_authentication_keycloak
+# - agnosticd.core_workloads.ocp4_workload_authentication
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
+- agnosticd.core_workloads.ocp4_workload_pipelines
 - workshop.workloads.ocp4_workload_kafka_console
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
@@ -78,7 +79,7 @@ tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://{{ kafka_console_ingress_domain }}
-  kafka_cluster_bootstrap_domain: "dbz-cluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-kafka.svc"
+  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-debezium.svc"
 
 # __meta__:
 #    catalog:
@@ -88,33 +89,38 @@ tenant_user_info_data:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
 # -------------------------------------------------------------------
-# ocp4_workload_tenant_keycloak_user_openshift_api_url: "{{ clusters[default].api_url }}"
-# ocp4_workload_tenant_keycloak_user_openshift_api_token: "{{ clusters[default].api_token }}"
+ocp4_workload_tenant_keycloak_user_keycloak_realm: sso
+ocp4_workload_tenant_keycloak_user_username: "user"
+ocp4_workload_tenant_keycloak_user_password: "dbztrain26"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_namespace
 # -------------------------------------------------------------------
-# ocp4_workload_tenant_namespace_openshift_api_url: "{{ clusters[default].api_url }}"
-# ocp4_workload_tenant_namespace_openshift_api_token: "{{ clusters[default].api_token }}"
-
 ocp4_workload_tenant_namespace_username: "user"
 
 ocp4_workload_tenant_namespace_suffixes:
-  - suffix: kafka
+  - suffix: tenant-comm-debezium
+  - suffix: tenant-comm-kafka
   - suffix: dev
   - suffix: db
 
 # -------------------------------------------------------------------
-# Workload: ocp4_workload_authentication_keycloak
+# Workload: ocp4_workload_tenant_openshift_gitops
 # -------------------------------------------------------------------
-ocp4_workload_authentication_keycloak_channel: stable-v26.4
-ocp4_workload_authentication_keycloak_num_users: "{{ num_users }}"
+ocp4_workload_tenant_openshift_gitops_user: "{{ ocp4_workload_tenant_namespace_username }}"
 
-ocp4_workload_authentication_keycloak_clients:
-  - clientId: kafka-console
-    secret: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=32') }}"
-    redirectUris:
-      - https://console-kafka-console.{{ openshift_cluster_ingress_domain }}/*
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_authentication
+# -------------------------------------------------------------------
+# ocp4_workload_authentication_provider: keycloak
+
+# ocp4_workload_authentication_keycloak_channel: stable-v26.4
+
+# ocp4_workload_authentication_keycloak_clients:
+#   - clientId: kafka-console
+#     secret: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=32') }}"
+#     redirectUris:
+#       - https://console-kafka-console.{{ openshift_cluster_ingress_domain }}/*
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
@@ -125,7 +131,7 @@ ocp4_workload_amq_streams_channel: stable
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_showroom
 # -------------------------------------------------------------------
-ocp4_workload_showroom_content_git_repo: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+ocp4_workload_showroom_content_git_repo: https://github.com/ryan-highley/amq-streams-debezium-showroom.git
 ocp4_workload_showroom_content_git_repo_ref: bcbs-sc-training
 
 ocp4_workload_showroom_content_antora_playbook: site.yml
