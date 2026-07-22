@@ -121,7 +121,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/
+      path: helm/kafka
       chartName: kafka
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
       values:
@@ -133,7 +133,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/
+      path: helm/tekton-pipeline
       chartName: tekton-pipeline
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
       values:
