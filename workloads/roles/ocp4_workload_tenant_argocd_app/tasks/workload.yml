@@ -41,12 +41,12 @@
   ansible.builtin.debug:
     msg: "{{ _ocp4_workload_tenant_argocd_app_all_values | to_yaml }}"
 
-- name: Create ArgoCD AppProject for {{ user }}
+- name: Create ArgoCD AppProject for {{ ocp4_workload_tenant_argocd_app_user }}
   kubernetes.core.k8s:
     state: present
     template: appproject-user.yaml.j2
 
-- name: Create ArgoCD Application for {{ user }}
+- name: Create ArgoCD Application for {{ ocp4_workload_tenant_argocd_app_user }}
   kubernetes.core.k8s:
     state: present
     template: application.yaml.j2
