@@ -13,11 +13,13 @@ spec:
   - "*"
   sourceNamespaces:
   - "{{ ocp4_workload_tenant_argocd_app_user }}-*"
+{% if ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist %}
   clusterResourceWhitelist:
 {% for resource in ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist %}
   - group: "{{ resource.group }}"
     kind: {{ resource.kind }}
 {% endfor %}
+{% endif %}
   roles:
   - name: user-role
     description: "Role for {{ ocp4_workload_tenant_argocd_app_user }}"
