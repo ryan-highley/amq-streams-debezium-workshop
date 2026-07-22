@@ -7,13 +7,17 @@ metadata:
 spec:
   project: {{ $.Values.project }}
   source:
-    chart: {{ .name }}
     repoURL: {{ $.Values.repoURL }}
     targetRevision: {{ $.Values.revision }}
+    path: {{ .path }}
     helm:
       values:
-        {{ .values }}
+        {{ .values | toYaml | indent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .destinationNamespace }}
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
 {{- end }}

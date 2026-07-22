@@ -131,7 +131,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
   applications:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
       path: helm/kafka
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
       values:
         kafka:
           image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
