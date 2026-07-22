@@ -1,0 +1,8 @@
+# Shared values for both kafkaconnect and tekton-pipeline
+global:
+  namespace: tenant-comm-debezium
+  imageTag: latest
+  imageRegistry: images.pkgrepo.bcbssc.com/openshift/tenant/
+  storageClassName: file-system-commercial
+  appName: tenant-comm-debezium
+

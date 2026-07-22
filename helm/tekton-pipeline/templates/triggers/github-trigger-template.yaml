@@ -1,0 +1,30 @@
+{{- if .Values.git.githubwebookenabled -}}
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-trigger-template
+  namespace: {{ .Values.global.namespace }}
+spec:
+  params:
+    - name: git-revision
+      description: The git revision
+    - name: git-url
+      description: The git repository url
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: webhook-debezium-run-
+      spec:
+        pipelineRef:
+          name: webhook-build-and-push-debezium
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-revision)
+        workspaces:
+          - name: shared-data
+            persistentVolumeClaim:
+              claimName: {{ .Values.global.appName }}-pvc
+{{- end -}}

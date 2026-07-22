@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: rollout-restart
+  namespace: {{ .Values.global.namespace }}
+spec:
+  params:
+    - name: RESOURCE_TYPE
+      type: string
+      default: "statefulset"
+    - name: RESOURCE_NAME
+      type: string
+    - name: NAMESPACE
+      type: string
+      default: {{ .Values.global.namespace }}
+  steps:
+    - name: restart
+      image: quay.io/openshift/origin-cli:latest
+      script: |
+        echo "Restarting $(params.RESOURCE_TYPE)/$(params.RESOURCE_NAME) in namespace $(params.NAMESPACE)..."
+        oc rollout restart $(params.RESOURCE_TYPE)/$(params.RESOURCE_NAME) -n $(params.NAMESPACE)
+        echo "Waiting for rollout to complete..."
+        oc rollout status $(params.RESOURCE_TYPE)/$(params.RESOURCE_NAME) -n $(params.NAMESPACE)

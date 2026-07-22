@@ -83,7 +83,7 @@ tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-debezium.svc"
+  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
@@ -118,6 +118,25 @@ ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
 ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_keycloak_username }}-app-config"
 ocp4_workload_tenant_argocd_appproject_name: "{{ lookup('agnosticd_user_data', 'openshift_gitops_appproject') }}"
 ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_keycloak_username }}-dev"
+
+ocp4_workload_tenant_argocd_app_helm_values:
+  namespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
+  project: "{{ ocp4_workload_tenant_argocd_appproject_name }}"
+
+  repoURL: "{{ workshop_gitops_repo_url }}"
+  revision: "{{ workshop_gitops_repo_revision }}"
+
+  applications:
+    - name: kafka
+      path: helm/kafka
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
+      values:
+        global:
+          namespace: "{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-debezium"
+        kafka:
+          image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
+          localcluster:
+            namespace: "{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_authentication

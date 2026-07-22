@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: maven-build-and-deploy
+  namespace: {{ .Values.global.namespace }}
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: ARTIFACTORY_USERNAME_SECRET_NAME
+      type: string
+      default: "pipeline-maven-credentials"
+    - name: ARTIFACTORY_USERNAME_SECRET_KEY
+      type: string
+      default: "ARTIFACTORY_USERNAME"
+    - name: ARTIFACTORY_PASSWORD_SECRET_NAME
+      type: string
+      default: "pipeline-maven-credentials"
+    - name: ARTIFACTORY_PASSWORD_SECRET_KEY
+      type: string
+      default: "ARTIFACTORY_PASSWORD"
+    - name: MAVEN_IMAGE
+      type: string
+      default: {{ .Values.maven.image | default "images.pkgrepo.bcbssc.com/maven:3.9-eclipse-temurin-21" | quote }}
+  steps:
+    - name: build-and-deploy
+      image: $(params.MAVEN_IMAGE)
+      workingDir: $(workspaces.source.path)
+      {{- if .Values.maven.resources }}
+      resources:
+        {{- toYaml .Values.maven.resources | nindent 8 }}
+      {{- end }}
+      env:
+        - name: ARTIFACTORY_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: $(params.ARTIFACTORY_USERNAME_SECRET_NAME)
+              key: $(params.ARTIFACTORY_USERNAME_SECRET_KEY)
+        - name: ARTIFACTORY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: $(params.ARTIFACTORY_PASSWORD_SECRET_NAME)
+              key: $(params.ARTIFACTORY_PASSWORD_SECRET_KEY)
+      script: |
+        #!/bin/bash
+        echo "Starting Maven Build and Deploy..."
+        mvn clean deploy -s settings.xml -DskipTests
+        if [ $? -eq 0 ]; then
+          echo "Successfully published artifacts to Artifactory."
+          echo "Cleaning up Maven build artifacts from workspace to reclaim disk space..."
+          mvn clean
+        else
+          echo "Maven deploy failed."
+          exit 1
+        fi

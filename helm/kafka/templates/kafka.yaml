@@ -1,0 +1,30 @@
+{{- if $.Values.kafka.enabled }}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{$.Values.kafka.localcluster.clustername}}
+  namespace: {{$.Values.kafka.localcluster.namespace}}
+  annotations: 
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "2"
+spec:
+  kafka:
+    replicas: {{$.Values.kafka.localcluster.replicas}}
+
+    listeners:
+      - name: plain
+        type: internal
+        port: 9092
+        tls: false
+
+    config:
+      offsets.topic.replication.factor: {{$.Values.kafka.localcluster.offsets}}
+      transaction.state.log.replication.factor: {{$.Values.kafka.localcluster.transreplication}}
+      transaction.state.log.min.isr: {{$.Values.kafka.localcluster.translogmin}}
+      default.replication.factor: {{$.Values.kafka.localcluster.default}}
+      min.insync.replicas: {{$.Values.kafka.localcluster.insync}}
+
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+{{- end }}

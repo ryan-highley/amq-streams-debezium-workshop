@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-upgrade
+  namespace: {{ .Values.global.namespace }}
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: RELEASE_NAME
+      type: string
+    - name: CHART_PATH
+      type: string
+    - name: VALUES_FILE
+      type: string
+      default: "helm/global-values.yaml"
+    - name: NAMESPACE
+      type: string
+      default: {{ .Values.global.namespace }}
+  steps:
+    - name: helm-upgrade
+      image: images.pkgrepo.bcbssc.com/alpine/helm:3.12.0
+      workingDir: $(workspaces.source.path)
+      script: |
+        echo "Running helm upgrade --install $(params.RELEASE_NAME) $(params.CHART_PATH) ..."
+        helm upgrade --install $(params.RELEASE_NAME) $(params.CHART_PATH) -f $(params.VALUES_FILE) -n $(params.NAMESPACE)

@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-clone
+  namespace: {{ .Values.global.namespace }}
+spec:
+  workspaces:
+    - name: output
+  params:
+    - name: url
+      type: string
+      default: {{ .Values.git.url | quote }}
+    - name: revision
+      type: string
+      default: {{ .Values.git.revision | quote }}
+    - name: subdirectory
+      type: string
+      default: ""
+    - name: deleteExisting
+      type: string
+      default: "true"
+  steps:
+    - name: clone
+      image: images.pkgrepo.bcbssc.com/alpine/git:latest
+      workingDir: $(workspaces.output.path)
+      script: |
+        SUBDIR="$(params.subdirectory)"
+        if [ "$(params.deleteExisting)" = "true" ] ; then
+          if [ -n "$SUBDIR" ]; then
+            mkdir -p "$SUBDIR"
+            rm -rf "$SUBDIR"/*
+          else
+            find . -mindepth 1 -delete
+          fi
+        fi
+
+        if [ -n "$SUBDIR" ]; then
+          git -c core.sshCommand='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' clone $(params.url) "$SUBDIR"
+          cd "$SUBDIR"
+        else
+          git -c core.sshCommand='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' clone $(params.url) .
+        fi
+        git checkout $(params.revision)

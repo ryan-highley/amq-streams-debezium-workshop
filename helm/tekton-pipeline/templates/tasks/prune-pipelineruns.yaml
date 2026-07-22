@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: prune-pipelineruns
+  namespace: {{ .Values.global.namespace }}
+spec:
+  params:
+    - name: PIPELINE_NAME
+      type: string
+    - name: KEEP_COUNT
+      type: string
+      default: "2"
+  steps:
+    - name: prune
+      image: quay.io/openshift/origin-cli:latest
+      script: |
+        echo "Pruning PipelineRuns for $(params.PIPELINE_NAME), keeping last $(params.KEEP_COUNT)..."
+        # Get names of PipelineRuns for this pipeline, sorted by creation timestamp (oldest first)
+        PR_NAMES=$(oc get pipelinerun -l tekton.dev/pipeline=$(params.PIPELINE_NAME) --sort-by=.metadata.creationTimestamp -o name)
+        
+        COUNT=$(echo "$PR_NAMES" | grep -v "^$" | wc -l)
+        echo "Found $COUNT PipelineRuns."
+        
+        if [ "$COUNT" -gt "$(params.KEEP_COUNT)" ]; then
+          TO_DELETE_COUNT=$((COUNT - $(params.KEEP_COUNT)))
+          echo "Deleting $TO_DELETE_COUNT oldest PipelineRuns..."
+          echo "$PR_NAMES" | head -n "$TO_DELETE_COUNT" | xargs -r oc delete
+        else
+          echo "Nothing to prune."
+        fi

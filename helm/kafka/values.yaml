@@ -1,0 +1,58 @@
+global:
+  namespace: tenant-comm-debezium
+  secretreader: 
+    role: btds-kafkaconnect-secretreader
+
+replicaCount: 1
+
+kafka:
+  enabled: true
+  image: "images.pkgrepo.bcbssc.com/openshift/tenant/tenant-comm-debezium:latest"
+  localcluster:
+    replicas: 1
+    namespace: tenant-comm-kafka
+    clustername: btds-kafkacluster
+    insync: 1
+    default: 1
+    translogmin: 1
+    transreplication: 1
+    offsets: 1
+  nodepool:
+    broker:
+      name: btds-kafkanodepoolbroker
+      storage: 10Gi
+      cpu:
+        request: 20m
+        limits: 1
+      memory:
+        request: 512Mi
+        limits: 2Gi
+      replicas: 1
+    controller:
+      name: btds-kafkanodepoolcontroller
+      storage: 10Gi
+      cpu:
+        request: 20m
+        limits: 1
+      memory:
+        request: 512Mi
+        limits: 2Gi
+      replicas: 1
+kafkaTopics:
+  - name: db2-connect-configs
+    partitions: 1
+  - name: db2-connect-offsets
+    partitions: 1
+  - name: db2-connect-status
+    partitions: 1
+  - name: mssql-connect-configs
+    partitions: 1
+  - name: mssql-connect-offsets
+    partitions: 1
+  - name: mssql-connect-status
+    partitions: 1
+  - name: mssql-sink-dlq
+    partitions: 1
+  - name: db2-sink-dlq
+    partitions: 1
+ 

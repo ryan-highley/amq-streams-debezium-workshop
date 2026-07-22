@@ -1,0 +1,31 @@
+{{- if $.Values.kafka.enabled }}
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{.Values.kafka.nodepool.controller.name}}
+  namespace: {{$.Values.kafka.localcluster.namespace}}
+  labels:
+    strimzi.io/cluster: {{$.Values.kafka.localcluster.clustername}}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  replicas: {{$.Values.kafka.nodepool.controller.replicas}}
+  roles:
+    - controller
+
+  storage:
+    type: persistent-claim
+    size: {{$.Values.kafka.nodepool.controller.storage}}
+    deleteClaim: true
+
+  resources:
+    requests:
+      cpu: {{$.Values.kafka.nodepool.controller.cpu.request}}
+      memory: {{$.Values.kafka.nodepool.controller.memory.request}}
+    limits:
+      cpu: {{$.Values.kafka.nodepool.controller.cpu.limits}}
+      memory: {{$.Values.kafka.nodepool.controller.memory.limits}}
+{{- end}}

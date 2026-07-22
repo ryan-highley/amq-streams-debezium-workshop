@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-data-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.workspace.size }}
+  {{- if .Values.global.storageClassName }}
+  storageClassName: {{ .Values.global.storageClassName }}
+  {{- end }}

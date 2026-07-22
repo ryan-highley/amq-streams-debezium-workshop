@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: helm-upgrade-pipeline-and-app
+  namespace: {{ .Values.global.namespace }}
+spec:
+  workspaces:
+    - name: shared-data
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-data
+    - name: deploy-pipeline
+      taskRef:
+        name: helm-upgrade
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-data
+      params:
+        - name: RELEASE_NAME
+          value: "btds-kafkaconnect-pipeline"
+        - name: CHART_PATH
+          value: "helm/tekton-pipeline"
+    - name: deploy-application
+      taskRef:
+        name: helm-upgrade
+      runAfter:
+        - deploy-pipeline
+      workspaces:
+        - name: source
+          workspace: shared-data
+      params:
+        - name: RELEASE_NAME
+          value: "btds-kafkaconnect"
+        - name: CHART_PATH
+          value: "helm/kafkaconnect"
+    - name: restart-application
+      taskRef:
+        name: rollout-restart
+      runAfter:
+        - deploy-application
+      params:
+        - name: RESOURCE_TYPE
+          value: "statefulset"
+        - name: RESOURCE_NAME
+          value: "btds-kafkaconnect"
+  finally:
+    - name: cleanup-old-runs
+      taskRef:
+        name: prune-pipelineruns
+      params:
+        - name: PIPELINE_NAME
+          value: helm-upgrade-pipeline-and-app
+

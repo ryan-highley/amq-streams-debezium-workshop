@@ -1,0 +1,13 @@
+{{- if .Values.git.githubwebookenabled -}}
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-trigger-binding
+  namespace: {{ .Values.global.namespace }}
+spec:
+  params:
+    - name: git-revision
+      value: $(body.head_commit.id)
+    - name: git-url
+      value: $(body.repository.ssh_url)
+{{- end -}}

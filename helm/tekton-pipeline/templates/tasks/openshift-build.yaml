@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: openshift-build
+  namespace: {{ .Values.global.namespace }}
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: BUILD_CONFIG_NAME
+      type: string
+      default: {{ .Values.global.appName | quote }}
+    - name: NAMESPACE
+      type: string
+      default: {{ .Values.global.namespace | quote }}
+  steps:
+    - name: start-build
+      image: quay.io/openshift/origin-cli:latest
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/bin/bash
+        echo "Starting OpenShift build for BuildConfig: $(params.BUILD_CONFIG_NAME) in namespace: $(params.NAMESPACE)..."
+        # Exclude components, .git, .idea, docs, logs, and tmp to optimize transfer size and speed
+        oc start-build $(params.BUILD_CONFIG_NAME) --from-dir=. --exclude='(^|/)(\.git|\.idea|components|docs|logs|tmp)(/|$)' --follow -n $(params.NAMESPACE)
+        if [ $? -eq 0 ]; then
+          echo "Successfully completed OpenShift build."
+        else
+          echo "OpenShift build failed."
+          exit 1
+        fi

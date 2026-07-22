@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: {{ .Values.global.appName }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.global.appName }}
+spec:
+  output:
+    to:
+      kind: DockerImage
+      name: {{ printf "%s%s:%s" .Values.global.imageRegistry .Values.global.appName .Values.global.imageTag }}
+  source:
+    type: Binary
+  strategy:
+    type: Docker
+    dockerStrategy:
+      # Since we use a multi-stage Dockerfile, OpenShift will handle the stages.
+      # We don't strictly need a 'from' here as it's defined in the Dockerfile.
+      noCache: true
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2Gi
+    requests:
+      cpu: "10m"
+      memory: 256Mi

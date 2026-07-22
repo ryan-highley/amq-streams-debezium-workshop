@@ -48,5 +48,5 @@ examples/
 
 # Ignore BCBS code for now
 components/
-helm/
+helm/kafkaconnect/
 scripts/

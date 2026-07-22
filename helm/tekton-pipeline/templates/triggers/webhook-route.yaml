@@ -1,0 +1,19 @@
+{{- if .Values.git.githubwebookenabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: webhook
+  namespace: {{ .Values.global.namespace }}
+spec:
+  host: webhook-{{ .Values.global.namespace }}.apps.test.ocp.bcbssc.com
+  to:
+    kind: Service
+    name: el-debezium-webhook
+    weight: 100
+  port:
+    targetPort: http-listener
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+{{- end -}}

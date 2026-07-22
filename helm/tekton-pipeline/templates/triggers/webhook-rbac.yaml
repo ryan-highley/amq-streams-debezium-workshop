@@ -1,0 +1,20 @@
+{{- if .Values.git.githubwebookenabled -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: debezium-webhook-sa
+  namespace: {{ .Values.global.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: debezium-webhook-rb
+  namespace: {{ .Values.global.namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: debezium-webhook-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit # Allows the SA to create PipelineRuns and other resources
+{{- end -}}
