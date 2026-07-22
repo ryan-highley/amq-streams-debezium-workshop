@@ -8,9 +8,7 @@ applications:
   - name: kafka
     path: helm/kafka
     destinationNamespace: kafka
-    values:
-      kafka:
-        image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
+    values: {}
 
   # - name: kafkaconnect
   #   path: helm/kafkaconnect

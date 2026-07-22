@@ -120,14 +120,13 @@ ocp4_workload_tenant_argocd_appproject_name: "{{ lookup('agnosticd_user_data', '
 ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_keycloak_username }}-dev"
 
 ocp4_workload_tenant_argocd_app_helm_values:
-  namespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
   project: "{{ ocp4_workload_tenant_argocd_appproject_name }}"
 
   repoURL: "{{ workshop_gitops_repo_url }}"
   revision: "{{ workshop_gitops_repo_revision }}"
 
   applications:
-    - name: kafka
+    - name: "{{ ocp4_workload_tenant_keycloak_username }}-kafka"
       path: helm/kafka
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
       values:
