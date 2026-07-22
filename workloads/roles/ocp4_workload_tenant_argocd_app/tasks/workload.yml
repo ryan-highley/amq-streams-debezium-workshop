@@ -25,7 +25,7 @@
       app:
         name: "{{ ocp4_workload_tenant_argocd_app_name }}"
         namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"
-        project: "{{ ocp4_workload_tenant_argocd_appproject_name }}"
+        project: "{{ ocp4_workload_tenant_argocd_app_project_name }}"
         destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
 
 - name: Combine all Helm values
@@ -41,7 +41,12 @@
   ansible.builtin.debug:
     msg: "{{ _ocp4_workload_tenant_argocd_app_all_values | to_yaml }}"
 
-- name: Create ArgoCD Application
+- name: Create ArgoCD AppProject for {{ user }}
+  kubernetes.core.k8s:
+    state: present
+    template: appproject-user.yaml.j2
+
+- name: Create ArgoCD Application for {{ user }}
   kubernetes.core.k8s:
     state: present
     template: application.yaml.j2
@@ -58,3 +63,10 @@
   until:
     - argocd_app_result.resources | length > 0
   failed_when: argocd_app_result.resources | length == 0
+
+- name: Save AgnosticD user data
+  agnosticd.core.agnosticd_user_info:
+    data:
+      openshift_gitops_server: "{{ ocp4_workload_tenant_argocd_app_gitops_repo_url }}"
+      openshift_gitops_user: "{{ ocp4_workload_tenant_argocd_app_user }}"
+      openshift_gitops_appproject: "{{ ocp4_workload_tenant_argocd_app_project_name }}"

@@ -5,7 +5,7 @@ metadata:
   name: {{ ocp4_workload_tenant_argocd_app_name }}
   namespace: {{ ocp4_workload_tenant_argocd_app_namespace }}
 spec:
-  project: {{ ocp4_workload_tenant_argocd_appproject_name }}
+  project: {{ ocp4_workload_tenant_argocd_app_project_name }}
   source:
     repoURL: {{ ocp4_workload_tenant_argocd_app_gitops_repo_url }}
     targetRevision: {{ ocp4_workload_tenant_argocd_app_gitops_repo_revision }}
