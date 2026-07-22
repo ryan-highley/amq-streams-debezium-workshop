@@ -11,8 +11,8 @@ spec:
     repoURL: {{ $.Values.repoURL }}
     targetRevision: {{ $.Values.revision }}
     helm:
-      values: |
-        {{ .values | toString | indent 8 }}
+      values:
+        {{ .values }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .destinationNamespace }}
