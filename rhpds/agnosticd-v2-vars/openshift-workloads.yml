@@ -52,7 +52,6 @@ clusters:
 # ===================================================================
 
 workloads:
-# - agnosticd.core_workloads.ocp4_workload_authentication
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
 - agnosticd.core_workloads.ocp4_workload_pipelines
@@ -65,7 +64,6 @@ num_users: 3
 tenant_workloads:
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
-# - agnosticd.namespaced_workloads.ocp4_workload_tenant_openshift_gitops
 - workshop.workloads.ocp4_workload_tenant_argocd_app
 - agnosticd.showroom.ocp4_workload_showroom
 
@@ -104,12 +102,6 @@ ocp4_workload_tenant_namespace_suffixes:
   - suffix: db
 
 # -------------------------------------------------------------------
-# Workload: ocp4_workload_tenant_openshift_gitops
-# -------------------------------------------------------------------
-# ocp4_workload_tenant_openshift_gitops_user: "{{ ocp4_workload_tenant_keycloak_username }}"
-# ocp4_workload_tenant_openshift_gitops_user_cluster_resource_whitelist: []
-
-# -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_argocd_app
 # -------------------------------------------------------------------
 ocp4_workload_tenant_argocd_app_user: "{{ ocp4_workload_tenant_keycloak_username }}"
@@ -117,7 +109,7 @@ ocp4_workload_tenant_argocd_app_gitops_repo_url: "{{ workshop_gitops_repo_url }}
 ocp4_workload_tenant_argocd_app_gitops_repo_revision: "{{ workshop_gitops_repo_revision }}"
 ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
 ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_argocd_app_user }}-app-config"
-ocp4_workload_tenant_argocd_app_project_name: "appproject-{{ ocp4_workload_tenant_argocd_app_user }}"
+ocp4_workload_tenant_argocd_app_project_name: "{{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}"
 ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
 ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist: []
 
@@ -125,37 +117,28 @@ ocp4_workload_tenant_argocd_app_helm_values:
   namespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
   project: "{{ ocp4_workload_tenant_argocd_app_project_name }}"
 
-  repoURL: "{{ workshop_gitops_repo_url }}"
-  revision: "{{ workshop_gitops_repo_revision }}"
-
   applications:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
-      path: helm/kafka
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: helm/
+      chartName: kafka
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
       values:
         kafka:
           image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
+
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
-      path: helm/tekton-pipeline
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: helm/
+      chartName: tekton-pipeline
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
       values:
         global:
           namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
-
-# -------------------------------------------------------------------
-# Workload: ocp4_workload_authentication
-# -------------------------------------------------------------------
-# ocp4_workload_authentication_provider: keycloak
-
-# ocp4_workload_authentication_keycloak_channel: stable-v26.4
-
-# ocp4_workload_authentication_keycloak_clients:
-#   - clientId: kafka-console
-#     secret: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=32') }}"
-#     redirectUris:
-#       - https://console-kafka-console.{{ openshift_cluster_ingress_domain }}/*
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams

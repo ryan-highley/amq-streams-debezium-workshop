@@ -1,21 +1,27 @@
 namespace: openshift-gitops
 project: default
 
-repoURL: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
-revision: main
-
-applications:
-  - name: kafka
-    path: helm/kafka
-    destinationNamespace: kafka
-    values: {}
+applications: []
+  # - name: kafka
+  #   repoURL: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+  #   revision: main
+  #   path: helm/
+  #   chartName: kafka
+  #   destinationNamespace: kafka
+  #   values: {}
 
   # - name: kafkaconnect
-  #   path: helm/kafkaconnect
+  #   repoURL: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+  #   revision: main
+  #   path: helm/
+  #   chartName: kafkaconnect
   #   destinationNamespace: kafkaconnect
   #   values: {}
 
-  - name: tekton-pipeline
-    path: helm/tekton-pipeline
-    destinationNamespace: tekton-pipeline
-    values: {}
+  # - name: tekton-pipeline
+  #   repoURL: https://github.com/ryan-highley/amq-streams-debezium-workshop.git
+  #   revision: main
+  #   path: helm/
+  #   chartName: tekton-pipeline
+  #   destinationNamespace: tekton-pipeline
+  #   values: {}
