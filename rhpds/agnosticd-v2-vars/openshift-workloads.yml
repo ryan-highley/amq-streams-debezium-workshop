@@ -135,15 +135,15 @@ ocp4_workload_tenant_argocd_app_helm_values:
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
 
-    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
-      repoURL: "{{ workshop_gitops_repo_url }}"
-      revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/tekton-pipeline
-      chartName: tekton-pipeline
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
-      values:
-        global:
-          namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+    # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
+    #   repoURL: "{{ workshop_gitops_repo_url }}"
+    #   revision: "{{ workshop_gitops_repo_revision }}"
+    #   path: helm/tekton-pipeline
+    #   chartName: tekton-pipeline
+    #   destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+    #   values:
+    #     global:
+    #       namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams

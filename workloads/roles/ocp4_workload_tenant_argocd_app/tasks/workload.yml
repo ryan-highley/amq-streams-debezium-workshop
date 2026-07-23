@@ -39,7 +39,7 @@
 
 - name: Debug final Helm values
   ansible.builtin.debug:
-    msg: "{{ _ocp4_workload_tenant_argocd_app_all_values | to_yaml }}"
+    msg: "{{ _ocp4_workload_tenant_argocd_app_all_values | to_nice_yaml }}"
 
 # - name: Add user account to ArgoCD CR
 #   kubernetes.core.k8s:
