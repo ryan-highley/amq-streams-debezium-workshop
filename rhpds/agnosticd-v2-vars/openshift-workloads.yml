@@ -105,14 +105,18 @@ ocp4_workload_tenant_namespace_suffixes:
 # Workload: ocp4_workload_tenant_argocd_app
 # -------------------------------------------------------------------
 ocp4_workload_tenant_argocd_app_user: "{{ ocp4_workload_tenant_keycloak_username }}"
+
 ocp4_workload_tenant_argocd_app_gitops_repo_url: "{{ workshop_gitops_repo_url }}"
 ocp4_workload_tenant_argocd_app_gitops_repo_revision: "{{ workshop_gitops_repo_revision }}"
 ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
+
 ocp4_workload_tenant_argocd_app_project_name: "{{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}"
+# ocp4_workload_tenant_argocd_app_project_namespace: openshift-gitops  # <-- Default
 ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist: []
+
 ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_argocd_app_user }}-app-config"
-ocp4_workload_tenant_argocd_app_namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
-ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"
+# ocp4_workload_tenant_argocd_app_namespace: openshift-gitops   # <-- Default
+ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"  # <-- App of Apps in same namespace
 
 ocp4_workload_tenant_argocd_app_helm_values:
   namespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"

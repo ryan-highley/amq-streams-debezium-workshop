@@ -9,10 +9,10 @@ spec:
   destinations:
   - namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-*"
     server: https://kubernetes.default.svc
+  - namespace: "{{ ocp4_workload_tenant_argocd_app_project_namespace }}"
+    server: https://kubernetes.default.svc
   sourceRepos:
   - "*"
-  sourceNamespaces:
-  - "{{ ocp4_workload_tenant_argocd_app_user }}-*"
 {% if ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist %}
   clusterResourceWhitelist:
 {% for resource in ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist %}
@@ -24,6 +24,6 @@ spec:
   - name: user-role
     description: "Role for {{ ocp4_workload_tenant_argocd_app_user }}"
     policies:
-    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, *, *, {{ ocp4_workload_tenant_argocd_app_project_name }}/*/*, allow
+    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, *, *, {{ ocp4_workload_tenant_argocd_app_project_name }}/*, allow
     groups:
     - "{{ ocp4_workload_tenant_argocd_app_user }}"
