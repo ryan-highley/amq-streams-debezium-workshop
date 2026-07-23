@@ -24,7 +24,6 @@ spec:
   - name: user-role
     description: "Role for {{ ocp4_workload_tenant_argocd_app_user }}"
     policies:
-    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, *, get, {{ ocp4_workload_tenant_argocd_app_project_name }}/*/*, allow
-    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, applications, *, {{ ocp4_workload_tenant_argocd_app_project_name }}/*/*, allow
+    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, *, *, {{ ocp4_workload_tenant_argocd_app_project_name }}/*/*, allow
     groups:
     - "{{ ocp4_workload_tenant_argocd_app_user }}"
