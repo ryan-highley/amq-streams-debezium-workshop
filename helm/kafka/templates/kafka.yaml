@@ -26,6 +26,10 @@ spec:
 
   entityOperator:
     topicOperator:
+      readinessProbe:
+        initialDelaySeconds: 60
+      livenessProbe:
+        initialDelaySeconds: 60
       resources:
         limits:
           cpu: 250m
@@ -34,6 +38,10 @@ spec:
           cpu: 25m
           memory: 128M
     userOperator:
+      readinessProbe:
+        initialDelaySeconds: 60
+      livenessProbe:
+        initialDelaySeconds: 60
       resources:
         limits:
           cpu: 250m

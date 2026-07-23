@@ -121,6 +121,7 @@ ocp4_workload_tenant_namespace_username: "{{ ocp4_workload_tenant_keycloak_usern
 ocp4_workload_tenant_namespace_suffixes:
   - suffix: tenant-comm-debezium
   - suffix: tenant-comm-kafka
+  - suffix: showroom
   - suffix: dev
   - suffix: db
 
