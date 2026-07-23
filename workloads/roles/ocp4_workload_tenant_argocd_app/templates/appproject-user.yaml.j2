@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: {{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}
+  name: {{ ocp4_workload_tenant_argocd_app_project_name }}
   namespace: {{ ocp4_workload_tenant_argocd_app_namespace }}
 spec:
   description: "Project for {{ ocp4_workload_tenant_argocd_app_user }}"
@@ -24,6 +24,6 @@ spec:
   - name: user-role
     description: "Role for {{ ocp4_workload_tenant_argocd_app_user }}"
     policies:
-    - p, proj:{{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}:user-role, applications, *, {{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}/*, allow
+    - p, proj:{{ ocp4_workload_tenant_argocd_app_project_name }}:user-role, applications, *, {{ ocp4_workload_tenant_argocd_app_project_name }}/*, allow
     groups:
     - "{{ ocp4_workload_tenant_argocd_app_user }}"

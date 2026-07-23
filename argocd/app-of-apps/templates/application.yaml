@@ -8,7 +8,6 @@ metadata:
 spec:
   project: {{ $.Values.project }}
   source:
-    chart: {{ .chartName }}
     repoURL: {{ .repoURL }}
     targetRevision: {{ .revision }}
     path: {{ .path }}
@@ -20,6 +19,6 @@ spec:
     namespace: {{ .destinationNamespace }}
   syncPolicy:
     automated:
-      prune: false
-      selfHeal: false
+      prune: true
+      selfHeal: true
 {{- end }}
