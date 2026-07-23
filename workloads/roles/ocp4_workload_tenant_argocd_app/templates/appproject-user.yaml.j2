@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: {{ ocp4_workload_tenant_argocd_app_project_name }}
-  namespace: {{ ocp4_workload_tenant_argocd_app_namespace }}
+  namespace: {{ ocp4_workload_tenant_argocd_app_project_namespace }}
 spec:
   description: "Project for {{ ocp4_workload_tenant_argocd_app_user }}"
   destinations:
