@@ -4,9 +4,9 @@ kind: Kafka
 metadata:
   name: {{$.Values.kafka.localcluster.clustername}}
   namespace: {{$.Values.kafka.localcluster.namespace}}
-  annotations: 
-    "helm.sh/hook": post-install
-    "helm.sh/hook-weight": "2"
+  # annotations:
+  #   "helm.sh/hook": post-install
+  #   "helm.sh/hook-weight": "2"
 spec:
   kafka:
     replicas: {{$.Values.kafka.localcluster.replicas}}

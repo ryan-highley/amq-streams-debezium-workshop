@@ -7,10 +7,10 @@ metadata:
   namespace: {{$.Values.kafka.localcluster.namespace}}
   labels:
     strimzi.io/cluster: {{$.Values.kafka.localcluster.clustername}}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": before-hook-creation
+  # annotations:
+  #   "helm.sh/hook": pre-install
+  #   "helm.sh/hook-weight": "0"
+  #   "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   replicas: {{$.Values.kafka.nodepool.controller.replicas}}
   roles:
