@@ -21,7 +21,7 @@ spec:
       default: "true"
   steps:
     - name: clone
-      image: images.pkgrepo.bcbssc.com/alpine/git:latest
+      image: {{ .Values.git.image | default "images.pkgrepo.bcbssc.com/alpine/git:latest" | quote }}
       workingDir: $(workspaces.output.path)
       script: |
         SUBDIR="$(params.subdirectory)"

@@ -58,9 +58,8 @@ workloads:
 - agnosticd.core_workloads.ocp4_workload_gitlab
 - workshop.workloads.ocp4_workload_kafka_console
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
+# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
-
-num_users: 3
 
 tenant_workloads:
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
@@ -85,17 +84,39 @@ tenant_user_info_data:
   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
 
+ocp4_workload_showroom_user_data_seed:
+  users:
+    user1:
+      username: tom
+    user2:
+      username: daniel
+    user3:
+      username: kim
+    user4:
+      username: libby
+    user5:
+      username: travis
+    user6:
+      username: austin
+    user7:
+      username: ted
+
+# num_users: "{{ ocp4_workload_showroom_user_data_seed.users | length }}"
+num_users: 3
+
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
 # -------------------------------------------------------------------
 ocp4_workload_tenant_keycloak_user_keycloak_realm: sso
 ocp4_workload_tenant_keycloak_user_username: "user"
 ocp4_workload_tenant_keycloak_user_password: "dbztrain26"
+# ocp4_workload_tenant_keycloak_username: "{{ lookup('agnosticd.core.agnosticd_user_data', 'username') }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_namespace
 # -------------------------------------------------------------------
 ocp4_workload_tenant_namespace_username: "{{ ocp4_workload_tenant_keycloak_username }}"
+# ocp4_workload_tenant_namespace_username: "user-{{ ocp4_workload_tenant_keycloak_username }}"
 
 ocp4_workload_tenant_namespace_suffixes:
   - suffix: tenant-comm-debezium
@@ -120,6 +141,8 @@ ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_argocd_app_user }
 # ocp4_workload_tenant_argocd_app_namespace: openshift-gitops   # <-- Default
 ocp4_workload_tenant_argocd_app_destination_namespace: "{{ ocp4_workload_tenant_argocd_app_namespace }}"  # <-- App of Apps in same namespace
 
+ocp4_workload_tenant_argocd_app_deploy_namespace_base: "{{ ocp4_workload_tenant_namespace_username }}"
+
 ocp4_workload_tenant_argocd_app_helm_values:
   namespace: "{{ ocp4_workload_tenant_argocd_app_destination_namespace }}"
   project: "{{ ocp4_workload_tenant_argocd_app_project_name }}"
@@ -130,32 +153,34 @@ ocp4_workload_tenant_argocd_app_helm_values:
       revision: "{{ workshop_gitops_repo_revision }}"
       path: helm/kafka
       chartName: kafka
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
       values:
         kafka:
           image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
           localcluster:
-            namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
+            namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
 
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
       path: helm/tekton-pipeline
       chartName: tekton-pipeline
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
       values:
         global:
-          namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+          namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
           imageTag: latest
-          imageRegistry: image-registry.openshift-image-registry.svc:5000/{{ ocp4_workload_tenant_argocd_app_user }}-dev/
+          imageRegistry: image-registry.openshift-image-registry.svc:5000/{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev/
           appName: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-debezium"
-
         git:
-          url: "git@gitlab.gitlab.svc:{{ {{ ocp4_workload_tenant_argocd_app_user }} }}/ocp_btds_debezium.git"
+          url: "git@gitlab.gitlab.svc:2222:{{ ocp4_workload_tenant_argocd_app_user }}/ocp_btds_debezium.git"
           revision: "feature/test"
           githubwebookenabled: false
+          image: "registry.redhat.io/openshift-builds/openshift-builds-git-cloner-rhel9:1.8.1"
+        helm:
+          image: "registry.redhat.io/openshift4/ose-helm-rhel9-operator:v4.21"
         maven:
-          image: "image-registry.openshift-image-registry.svc:5000/openshift/java:latest"
+          image: "registry.redhat.io/amq-streams/maven-builder-rhel9:3.2.0"
           resources:
             requests:
               cpu: "100m"
@@ -177,7 +202,7 @@ ocp4_workload_gitlab_user_default_access_levels: ["developer","maintainer"]
 # Workload: ocp4_workload_tenant_gitlab
 # -------------------------------------------------------------------
 ocp4_workload_tenant_gitlab_auth_mode: "{{ ocp4_workload_gitlab_auth_mode }}"
-ocp4_workload_tenant_gitlab_username: "{{ ocp4_workload_tenant_keycloak_user_username }}"
+ocp4_workload_tenant_gitlab_username: "{{ ocp4_workload_tenant_keycloak_username }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams

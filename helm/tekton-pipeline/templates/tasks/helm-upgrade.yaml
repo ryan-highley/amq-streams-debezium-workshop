@@ -19,7 +19,7 @@ spec:
       default: {{ .Values.global.namespace }}
   steps:
     - name: helm-upgrade
-      image: images.pkgrepo.bcbssc.com/alpine/helm:3.12.0
+      image: {{ .Values.helm.image | default "images.pkgrepo.bcbssc.com/alpine/helm:3.12.0" | quote }}
       workingDir: $(workspaces.source.path)
       script: |
         echo "Running helm upgrade --install $(params.RELEASE_NAME) $(params.CHART_PATH) ..."
