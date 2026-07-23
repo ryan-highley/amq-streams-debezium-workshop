@@ -55,6 +55,7 @@ workloads:
 - agnosticd.core_workloads.ocp4_workload_amq_streams
 - agnosticd.core_workloads.ocp4_workload_openshift_gitops
 - agnosticd.core_workloads.ocp4_workload_pipelines
+- agnosticd.core_workloads.ocp4_workload_gitlab
 - workshop.workloads.ocp4_workload_kafka_console
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
@@ -64,6 +65,7 @@ num_users: 3
 tenant_workloads:
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_keycloak_user
 - agnosticd.namespaced_workloads.ocp4_workload_tenant_namespace
+- agnosticd.namespaced_workloads.ocp4_workload_tenant_gitlab
 - workshop.workloads.ocp4_workload_tenant_argocd_app
 - agnosticd.showroom.ocp4_workload_showroom
 
@@ -135,15 +137,47 @@ ocp4_workload_tenant_argocd_app_helm_values:
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
 
-    # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
-    #   repoURL: "{{ workshop_gitops_repo_url }}"
-    #   revision: "{{ workshop_gitops_repo_revision }}"
-    #   path: helm/tekton-pipeline
-    #   chartName: tekton-pipeline
-    #   destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
-    #   values:
-    #     global:
-    #       namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: helm/tekton-pipeline
+      chartName: tekton-pipeline
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+      values:
+        global:
+          namespace: "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+          imageTag: latest
+          imageRegistry: image-registry.openshift-image-registry.svc:5000/{{ ocp4_workload_tenant_argocd_app_user }}-dev/
+          appName: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-debezium"
+
+        git:
+          url: "git@gitlab.gitlab.svc:{{ {{ ocp4_workload_tenant_argocd_app_user }} }}/ocp_btds_debezium.git"
+          revision: "feature/test"
+          githubwebookenabled: false
+        maven:
+          image: "image-registry.openshift-image-registry.svc:5000/openshift/java:latest"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "200Mi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_gitlab
+# -------------------------------------------------------------------
+ocp4_workload_gitlab_volume_size: 20Gi
+ocp4_workload_gitlab_postgresql_volume_size: 10Gi
+ocp4_workload_gitlab_auth_mode: keycloak
+ocp4_workload_gitlab_user_default_access_levels: ["developer","maintainer"]
+
+# -------------------------------------------------------------------
+# Workload: ocp4_workload_tenant_gitlab
+# -------------------------------------------------------------------
+ocp4_workload_tenant_gitlab_auth_mode: "{{ ocp4_workload_gitlab_auth_mode }}"
+ocp4_workload_tenant_gitlab_username: "{{ ocp4_workload_tenant_keycloak_user_username }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
