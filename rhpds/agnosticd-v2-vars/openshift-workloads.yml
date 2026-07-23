@@ -178,7 +178,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
           githubwebookenabled: false
           image: "registry.redhat.io/openshift-builds/openshift-builds-git-cloner-rhel9:1.8.1"
         helm:
-          image: "registry.redhat.io/openshift4/ose-helm-rhel9-operator:v4.21"
+          image: "quay.io/redhat-cop/tekton-task-helm:latest"
         maven:
           image: "registry.redhat.io/amq-streams/maven-builder-rhel9:3.2.0"
           resources:
