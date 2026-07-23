@@ -25,6 +25,20 @@ spec:
       min.insync.replicas: {{$.Values.kafka.localcluster.insync}}
 
   entityOperator:
-    topicOperator: {}
-    userOperator: {}
+    topicOperator:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 256M
+        requests:
+          cpu: 25m
+          memory: 128M
+    userOperator:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 256M
+        requests:
+          cpu: 25m
+          memory: 128M
 {{- end }}
