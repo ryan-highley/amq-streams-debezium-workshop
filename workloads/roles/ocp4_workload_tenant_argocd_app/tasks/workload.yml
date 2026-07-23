@@ -41,6 +41,17 @@
   ansible.builtin.debug:
     msg: "{{ _ocp4_workload_tenant_argocd_app_all_values | to_yaml }}"
 
+# - name: Add user account to ArgoCD CR
+#   kubernetes.core.k8s:
+#     api_version: argoproj.io/v1beta1
+#     kind: ArgoCD
+#     namespace: openshift-gitops
+#     name: openshift-gitops
+#     state: patched
+#     definition:
+#       spec:
+#         extraConfig: "{{ {'accounts.' ~ ocp4_workload_tenant_argocd_app_user: 'apiKey, login'} }}"
+
 - name: Create ArgoCD AppProject for {{ ocp4_workload_tenant_argocd_app_user }}
   kubernetes.core.k8s:
     state: present
