@@ -1,4 +1,4 @@
-{{ range .Values.dataMounts }}
+{{ with .Values.dataMount }}
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
