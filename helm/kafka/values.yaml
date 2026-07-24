@@ -1,6 +1,6 @@
 global:
   namespace: tenant-comm-debezium
-  secretreader: 
+  secretreader:
     role: btds-kafkaconnect-secretreader
 
 replicaCount: 1
@@ -55,4 +55,3 @@ kafkaTopics:
     partitions: 1
   - name: db2-sink-dlq
     partitions: 1
- 

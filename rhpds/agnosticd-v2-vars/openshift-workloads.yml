@@ -160,6 +160,15 @@ ocp4_workload_tenant_argocd_app_helm_values:
           image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+          nodepool:
+            broker:
+              cpu:
+                request: 20m
+                limits: 250m
+            controller:
+              cpu:
+                request: 20m
+                limits: 250m
 
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
       repoURL: "{{ workshop_gitops_repo_url }}"
@@ -193,10 +202,10 @@ ocp4_workload_tenant_argocd_app_helm_values:
           resources:
             requests:
               cpu: "100m"
-              memory: "200Mi"
+              memory: "256Mi"
             limits:
-              cpu: "2"
-              memory: "4Gi"
+              cpu: "250m"
+              memory: "1Gi"
 
 
 # -------------------------------------------------------------------
