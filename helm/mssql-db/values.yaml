@@ -1,0 +1,79 @@
+
+replicaCount: 1
+
+image:
+  repository: mcr.microsoft.com/mssql/server
+  pullPolicy: IfNotPresent
+  tag: 2025-latest
+
+env:
+  - name: MSSQL_DATA_DIR
+    value: /opt/mssql-data
+  - name: MSSQL_LOG_DIR
+    value: /opt/mssql-log
+
+ports:
+  - name: mssql
+    containerPort: 1433
+    protocol: TCP
+
+service:
+  type: ClusterIP
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 2Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: http
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: http
+
+volumes:
+  - name: mssql-data-dir
+    persistentVolumeClaim:
+      claimName: mssql-data-dir
+      size: 5Gi
+  - name: mssql-log-dir
+    persistentVolumeClaim:
+      claimName: mssql-log-dir
+      size: 5Gi
+
+volumeMounts:
+  - name: mssql-data-dir
+    mountPath: /opt/mssql-data
+  - name: mssql-log-dir
+    mountPath: /opt/mssql-log
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -161,6 +161,14 @@ ocp4_workload_tenant_argocd_app_helm_values:
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
 
+    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: helm/mssql-db
+      chartName: mssql-db
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-db"
+      values: {}
+
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: mssql-db
+description: A Helm chart for deploying MS SQL Server
+type: application
+version: 0.1.0
