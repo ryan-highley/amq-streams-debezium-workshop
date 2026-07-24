@@ -132,7 +132,7 @@ ocp4_workload_tenant_argocd_app_user: "{{ ocp4_workload_tenant_keycloak_username
 
 ocp4_workload_tenant_argocd_app_gitops_repo_url: "{{ workshop_gitops_repo_url }}"
 ocp4_workload_tenant_argocd_app_gitops_repo_revision: "{{ workshop_gitops_repo_revision }}"
-ocp4_workload_tenant_argocd_app_gitops_repo_path: "argocd/app-of-apps"
+ocp4_workload_tenant_argocd_app_gitops_repo_path: "deployments/app-of-apps"
 
 ocp4_workload_tenant_argocd_app_project_name: "{{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}"
 # ocp4_workload_tenant_argocd_app_project_namespace: openshift-gitops  # <-- Default
@@ -152,7 +152,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/kafka
+      path: deployments/kafka
       chartName: kafka
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
       values:
@@ -173,7 +173,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/mssql-db
+      path: deployments/mssql-db
       chartName: mssql-db
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-db"
       values: {}
@@ -181,7 +181,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
       repoURL: "{{ workshop_gitops_repo_url }}"
       revision: "{{ workshop_gitops_repo_revision }}"
-      path: helm/tekton-pipeline
+      path: deployments/tekton-pipeline
       chartName: tekton-pipeline
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
       values:

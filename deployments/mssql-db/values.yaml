@@ -1,0 +1,50 @@
+
+replicaCount: 1
+
+image: mcr.microsoft.com/mssql/server:2025-latest
+
+selectorLabels:
+  app: mssql
+
+dataMount:
+  name: mssql-data-dir
+  path: /var/opt/mssql
+  size: 5Gi
+
+secret:
+  name: mssql
+  properties:
+    - key: MSSQL_SA_PASSWORD
+      value: P@ssW0rdY
+
+env:
+  - name: MSSQL_DATA_DIR
+    value: /var/opt/mssql
+  - name: MSSQL_PID
+    value: Developer
+  - name: ACCEPT_EULA
+    value: Y
+  - name: MSSQL_SA_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mssql
+        key: MSSQL_SA_PASSWORD
+
+ports:
+  - name: mssql
+    containerPort: 1433
+    protocol: TCP
+
+service:
+  type: LoadBalancer
+
+podSecurityContext:
+  fsGroup: 10001
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 2Gi
+  requests:
+    cpu: 20m
+    memory: 512Mi

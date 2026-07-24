@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-deployment
+spec:
+  selector:
+    {{ toYaml .Values.selectorLabels | nindent 4 }}
+  ports:
+    {{- range .Values.ports }}
+    - port: {{ .containerPort }}
+      targetPort: {{ .name }}
+      protocol: {{ .protocol }}
+      name: {{ .name }}
+    {{- end }}
+  type: {{ .Values.service.type }}
