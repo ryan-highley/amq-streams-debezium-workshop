@@ -58,7 +58,7 @@ workloads:
 - agnosticd.core_workloads.ocp4_workload_gitlab
 - workshop.workloads.ocp4_workload_kafka_console
 - agnosticd.showroom.ocp4_workload_ocp_console_embed
-# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
+- agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
 tenant_workloads:
@@ -78,28 +78,33 @@ remove_workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_multi_tenant_loop
 # -------------------------------------------------------------------
-tenant_user_info_data:
+# tenant_user_info_data:
+ocp4_workload_showroom_user_data_seed:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
+  login_command: oc login -u {{ user }} -p {{ password }}
+  gitea_user: "{{ user }}"
+  gitea_password: "{{ password }}"
+  gitea_console_url: https://gitea-gitea.{{ openshift_cluster_ingress_domain }}
 
-ocp4_workload_showroom_user_data_seed:
-  users:
-    user1:
-      username: tom
-    user2:
-      username: daniel
-    user3:
-      username: kim
-    user4:
-      username: libby
-    user5:
-      username: travis
-    user6:
-      username: austin
-    user7:
-      username: ted
+# ocp4_workload_showroom_user_data_seed:
+#   users:
+#     user1:
+#       username: tom
+#     user2:
+#       username: daniel
+#     user3:
+#       username: kim
+#     user4:
+#       username: libby
+#     user5:
+#       username: travis
+#     user6:
+#       username: austin
+#     user7:
+#       username: ted
 
 # num_users: "{{ ocp4_workload_showroom_user_data_seed.users | length }}"
 num_users: 3
