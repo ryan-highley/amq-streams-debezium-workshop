@@ -122,6 +122,13 @@ ocp4_workload_tenant_namespace_suffixes:
   - suffix: tenant-comm-debezium
   - suffix: tenant-comm-kafka
   - suffix: showroom
+    limit_range:
+      default:
+        cpu: 250m
+        memory: 256Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 256Mi
   - suffix: dev
   - suffix: db
 
