@@ -52,13 +52,12 @@ clusters:
 # ===================================================================
 
 workloads:
-- agnosticd.core_workloads.ocp4_workload_amq_streams
-- agnosticd.core_workloads.ocp4_workload_openshift_gitops
-- agnosticd.core_workloads.ocp4_workload_pipelines
-- agnosticd.core_workloads.ocp4_workload_gitlab
-- workshop.workloads.ocp4_workload_kafka_console
-- agnosticd.showroom.ocp4_workload_ocp_console_embed
-# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
+# - agnosticd.core_workloads.ocp4_workload_amq_streams
+# - agnosticd.core_workloads.ocp4_workload_openshift_gitops
+# - agnosticd.core_workloads.ocp4_workload_pipelines
+# - agnosticd.core_workloads.ocp4_workload_gitlab
+# - workshop.workloads.ocp4_workload_kafka_console
+# - agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
 tenant_workloads:
@@ -78,13 +77,14 @@ remove_workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_multi_tenant_loop
 # -------------------------------------------------------------------
-# tenant_user_info_data:
-#   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-#   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-#   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-#   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
-#   login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
+tenant_user_info_data:
+  # lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
+  login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
 
+# - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 # ocp4_workload_showroom_user_data_seed:
 #   users:
 #     user1:
@@ -151,7 +151,9 @@ ocp4_workload_tenant_argocd_app_gitops_repo_path: "deployments/app-of-apps"
 
 ocp4_workload_tenant_argocd_app_project_name: "{{ ocp4_workload_tenant_argocd_app_user_project_prefix }}-{{ ocp4_workload_tenant_argocd_app_user }}"
 # ocp4_workload_tenant_argocd_app_project_namespace: openshift-gitops  # <-- Default
-ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist: []
+ocp4_workload_tenant_argocd_app_user_cluster_resource_whitelist:
+  - group: console.openshift.io
+    kind: ConsoleLink
 
 ocp4_workload_tenant_argocd_app_name: "{{ ocp4_workload_tenant_argocd_app_user }}-app-config"
 # ocp4_workload_tenant_argocd_app_namespace: openshift-gitops   # <-- Default
@@ -230,10 +232,11 @@ ocp4_workload_tenant_argocd_app_helm_values:
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
       values:
         consolelinks:
-          - name: showroom
+          - name: "{{ ocp4_workload_tenant_argocd_app_user }}-showroom"
             spec:
-              href: "{{ lab_ui_url }}"
-              text: BCBS - SC Workshop
+              href: https://showroom-{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom.{{ openshift_cluster_ingress_domain }}
+              text: Red Hat Workshop
+              location: NamespaceDashboard
               namespaceDashboard:
                 namespaces:
                   - "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
