@@ -78,12 +78,12 @@ remove_workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_multi_tenant_loop
 # -------------------------------------------------------------------
-tenant_user_info_data:
-  lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
-  login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
+# tenant_user_info_data:
+#   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+#   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+#   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+#   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
+#   login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
 
 # ocp4_workload_showroom_user_data_seed:
 #   users:
