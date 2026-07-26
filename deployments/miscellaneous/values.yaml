@@ -1,0 +1,10 @@
+
+consolelinks:
+  - name: showroom
+    spec:
+      href: https://www.example.com
+      location: NamespaceDashboard
+      text: Custom Link Text
+      namespaceDashboard:
+        namespaces:
+        - default

@@ -78,22 +78,12 @@ remove_workloads:
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_multi_tenant_loop
 # -------------------------------------------------------------------
-tenant_user_info_data: >-
-  lab_ui_url: https://showroom-{{ user }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_ingress_domain: kafka-console-{{ user }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_console_url: https://kafka-console-{{ user }}-showroom.{{ openshift_cluster_ingress_domain }}
-  kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ user }}-tenant-comm-kafka.svc"
-  login_command: oc login -u {{ user }} -p {{ password }}
-  gitea_user: "{{ user }}"
-  gitea_password: "{{ password }}"
-  gitea_console_url: https://gitea-gitea.{{ openshift_cluster_ingress_domain }}
-
-commented:
+tenant_user_info_data:
   lab_ui_url: https://showroom-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_ingress_domain: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
-
+  login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
 
 # ocp4_workload_showroom_user_data_seed:
 #   users:
@@ -232,6 +222,25 @@ ocp4_workload_tenant_argocd_app_helm_values:
               cpu: "250m"
               memory: "1Gi"
 
+    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-miscellaneous"
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: deployments/miscellaneous
+      chartName: miscellaneous
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
+      values:
+        consolelinks:
+          - name: showroom
+            spec:
+              href: "{{ lab_ui_url }}"
+              text: BCBS - SC Workshop
+              namespaceDashboard:
+                namespaces:
+                  - "{{ ocp4_workload_tenant_argocd_app_user }}-dev"
+                  - "{{ ocp4_workload_tenant_argocd_app_user }}-db"
+                  - "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-debezium"
+                  - "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-kafka"
+                  - "{{ ocp4_workload_tenant_argocd_app_user }}-showroom"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_gitlab

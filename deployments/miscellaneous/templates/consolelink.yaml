@@ -1,0 +1,9 @@
+{{ range .Values.consolelinks }}
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: {{ .name }}
+spec:
+  {{ toYaml .spec | nindent 2 }}
+{{ end }}
