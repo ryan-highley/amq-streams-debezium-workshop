@@ -125,6 +125,13 @@ ocp4_workload_tenant_namespace_suffixes:
   - suffix: dev
   - suffix: db
 
+ocp4_workload_tenant_namespace_default_quota:
+  limits.cpu: "4"
+  requests.cpu: "4"
+  limits.memory: 12Gi
+  requests.memory: 12Gi
+  requests.storage: 50Gi
+
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_argocd_app
 # -------------------------------------------------------------------
@@ -242,6 +249,12 @@ ocp4_workload_showroom_content_only: false
 
 ocp4_workload_showroom_passthrough_user_data: true
 
+ocp4_workload_showroom_enable_dev_mode: true
+ocp4_workload_showroom_terminal_requests_cpu: 50m
+ocp4_workload_showroom_terminal_requests_memory: 256Mi
+ocp4_workload_showroom_terminal_limits_cpu: 150m
+ocp4_workload_showroom_terminal_limits_memory: 256Mi
+
 ocp4_workload_showroom_terminal_type: showroom
 ocp4_workload_showroom_terminal_image: quay.io/rhpds/openshift-showroom-terminal-ocp:latest
 ocp4_workload_showroom_content_ui_config: |
@@ -261,10 +274,13 @@ ocp4_workload_showroom_content_ui_config: |
     - name: OCP Console
       url: {{ openshift_console_url }}
 
-    # Single terminal
+    # Stacked terminals
     - name: Terminal
       path: /terminal
       port: 443
+      secondary_name: Terminal
+      secondary_path: /terminal
+      secondary_port: 443
 
     # Kafka Console
     - name: Kafka Console
