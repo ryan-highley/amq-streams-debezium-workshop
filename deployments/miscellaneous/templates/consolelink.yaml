@@ -1,4 +1,4 @@
-{{ range .Values.consolelinks }}
+{{ range .Values.consoleLinks }}
 ---
 apiVersion: console.openshift.io/v1
 kind: ConsoleLink
