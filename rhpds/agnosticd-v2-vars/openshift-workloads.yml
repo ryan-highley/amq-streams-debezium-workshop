@@ -52,12 +52,12 @@ clusters:
 # ===================================================================
 
 workloads:
-# - agnosticd.core_workloads.ocp4_workload_amq_streams
-# - agnosticd.core_workloads.ocp4_workload_openshift_gitops
-# - agnosticd.core_workloads.ocp4_workload_pipelines
-# - agnosticd.core_workloads.ocp4_workload_gitlab
-# - workshop.workloads.ocp4_workload_kafka_console
-# - agnosticd.showroom.ocp4_workload_ocp_console_embed
+- agnosticd.core_workloads.ocp4_workload_amq_streams
+- agnosticd.core_workloads.ocp4_workload_openshift_gitops
+- agnosticd.core_workloads.ocp4_workload_pipelines
+- agnosticd.core_workloads.ocp4_workload_gitlab
+- workshop.workloads.ocp4_workload_kafka_console
+- agnosticd.showroom.ocp4_workload_ocp_console_embed
 - agnosticd.core_workloads.ocp4_workload_multi_tenant_loop
 
 tenant_workloads:
@@ -83,6 +83,9 @@ tenant_user_info_data:
   kafka_console_url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
   kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
   login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
+  gitlab_user: "{{ ocp4_workload_tenant_keycloak_username }}"
+  gitlab_password: "{{ password }}"
+  gitlab_console_url: "https://gitlab-gitlab.{{ openshift_cluster_ingress_domain }}"
 
 # - agnosticd.showroom.ocp4_workload_showroom_user_data_seed
 # ocp4_workload_showroom_user_data_seed:
@@ -166,63 +169,63 @@ ocp4_workload_tenant_argocd_app_helm_values:
   project: "{{ ocp4_workload_tenant_argocd_app_project_name }}"
 
   applications:
-    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
-      repoURL: "{{ workshop_gitops_repo_url }}"
-      revision: "{{ workshop_gitops_repo_revision }}"
-      path: deployments/kafka
-      chartName: kafka
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
-      values:
-        kafka:
-          image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
-          localcluster:
-            namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
-          nodepool:
-            broker:
-              cpu:
-                request: 20m
-                limits: 250m
-            controller:
-              cpu:
-                request: 20m
-                limits: 250m
+    # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka"
+    #   repoURL: "{{ workshop_gitops_repo_url }}"
+    #   revision: "{{ workshop_gitops_repo_revision }}"
+    #   path: deployments/kafka
+    #   chartName: kafka
+    #   destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+    #   values:
+    #     kafka:
+    #       image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
+    #       localcluster:
+    #         namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+    #       nodepool:
+    #         broker:
+    #           cpu:
+    #             request: 20m
+    #             limits: 250m
+    #         controller:
+    #           cpu:
+    #             request: 20m
+    #             limits: 250m
 
-    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
-      repoURL: "{{ workshop_gitops_repo_url }}"
-      revision: "{{ workshop_gitops_repo_revision }}"
-      path: deployments/mssql-db
-      chartName: mssql-db
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-db"
-      values: {}
+    # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
+    #   repoURL: "{{ workshop_gitops_repo_url }}"
+    #   revision: "{{ workshop_gitops_repo_revision }}"
+    #   path: deployments/mssql-db
+    #   chartName: mssql-db
+    #   destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-db"
+    #   values: {}
 
-    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
-      repoURL: "{{ workshop_gitops_repo_url }}"
-      revision: "{{ workshop_gitops_repo_revision }}"
-      path: deployments/tekton-pipeline
-      chartName: tekton-pipeline
-      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
-      values:
-        global:
-          namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
-          imageTag: latest
-          imageRegistry: image-registry.openshift-image-registry.svc:5000/{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev/
-          appName: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-debezium"
-        git:
-          url: "git@gitlab.gitlab.svc:2222:{{ ocp4_workload_tenant_argocd_app_user }}/ocp_btds_debezium.git"
-          revision: "feature/test"
-          githubwebookenabled: false
-          image: "registry.redhat.io/openshift-builds/openshift-builds-git-cloner-rhel9:1.8.1"
-        helm:
-          image: "quay.io/redhat-cop/tekton-task-helm:latest"
-        maven:
-          image: "registry.redhat.io/amq-streams/maven-builder-rhel9:3.2.0"
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
-              cpu: "250m"
-              memory: "1Gi"
+    # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-tekton-pipeline"
+    #   repoURL: "{{ workshop_gitops_repo_url }}"
+    #   revision: "{{ workshop_gitops_repo_revision }}"
+    #   path: deployments/tekton-pipeline
+    #   chartName: tekton-pipeline
+    #   destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
+    #   values:
+    #     global:
+    #       namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
+    #       imageTag: latest
+    #       imageRegistry: image-registry.openshift-image-registry.svc:5000/{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev/
+    #       appName: "{{ ocp4_workload_tenant_argocd_app_user }}-tenant-comm-debezium"
+    #     git:
+    #       url: "git@gitlab.gitlab.svc:2222:{{ ocp4_workload_tenant_argocd_app_user }}/ocp_btds_debezium.git"
+    #       revision: "feature/test"
+    #       githubwebookenabled: false
+    #       image: "registry.redhat.io/openshift-builds/openshift-builds-git-cloner-rhel9:1.8.1"
+    #     helm:
+    #       image: "quay.io/redhat-cop/tekton-task-helm:latest"
+    #     maven:
+    #       image: "registry.redhat.io/amq-streams/maven-builder-rhel9:3.2.0"
+    #       resources:
+    #         requests:
+    #           cpu: "100m"
+    #           memory: "256Mi"
+    #         limits:
+    #           cpu: "250m"
+    #           memory: "1Gi"
 
     - name: "{{ ocp4_workload_tenant_argocd_app_user }}-miscellaneous"
       repoURL: "{{ workshop_gitops_repo_url }}"
@@ -313,8 +316,8 @@ ocp4_workload_showroom_content_ui_config: |
       secondary_port: 443
 
     # Kafka Console
-    - name: Kafka Console
-      url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+    # - name: Kafka Console
+    #   url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
 
     # External page
     - name: Red Hat Documentation
