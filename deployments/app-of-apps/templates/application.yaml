@@ -17,8 +17,16 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .destinationNamespace }}
+  {{- with .ignoreDifferences }}
+  ignoreDifferences:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - Prune=true
+      - RespectIgnoreDifferences=true
 {{- end }}

@@ -106,7 +106,8 @@ tenant_user_info_data:
 #       username: ted
 
 # num_users: "{{ ocp4_workload_showroom_user_data_seed.users | length }}"
-num_users: 20
+num_users: 3
+tenant_user_offset: 18
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
@@ -224,6 +225,13 @@ ocp4_workload_tenant_argocd_app_helm_values:
       path: deployments/kafka-console
       chartName: kafka-console
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom"
+      ignoreDifferences:
+        - group: ""
+          kind: ConfigMap
+          name: keycloak-tls
+          namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom"
+          jsonPointers:
+            - /data
       values:
         hostname: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
 
@@ -282,7 +290,7 @@ ocp4_workload_tenant_argocd_app_helm_values:
       chartName: miscellaneous
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
       values:
-        consolelinks:
+        consoleLinks:
           - name: "{{ ocp4_workload_tenant_argocd_app_user }}-showroom"
             spec:
               href: https://showroom-{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom.{{ openshift_cluster_ingress_domain }}
