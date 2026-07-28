@@ -12,9 +12,9 @@ spec:
         type: PEM
         content:
           valueFrom:
-            secretKeyRef:
-              name: keycloak-tls-secret
-              key: ca.crt
+            configMapKeyRef:
+              name: keycloak-tls
+              key: service-ca.crt
     {{- end }}
     subjects:
       - include:
