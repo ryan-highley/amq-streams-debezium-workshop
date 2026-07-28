@@ -106,7 +106,7 @@ tenant_user_info_data:
 #       username: ted
 
 # num_users: "{{ ocp4_workload_showroom_user_data_seed.users | length }}"
-num_users: 3
+num_users: 5
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user

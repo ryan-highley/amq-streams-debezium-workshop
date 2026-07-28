@@ -87,5 +87,5 @@
       kafka_cluster_bootstrap_domain: "btds-kafkacluster-kafka-bootstrap.{{ ocp4_workload_tenant_keycloak_username }}-tenant-comm-kafka.svc"
       login_command: oc login -u {{ ocp4_workload_tenant_keycloak_username }} -p {{ ocp4_workload_tenant_keycloak_user_password }}
       gitlab_console_url: https://gitlab-gitlab.{{ openshift_cluster_ingress_domain }}
-      gitlab_password: {{ ocp4_workload_tenant_keycloak_user_password }}
-      gitlab_user: {{ ocp4_workload_tenant_keycloak_username }}
+      gitlab_password: "{{ ocp4_workload_tenant_keycloak_user_password }}"
+      gitlab_user: "{{ ocp4_workload_tenant_keycloak_username }}"
