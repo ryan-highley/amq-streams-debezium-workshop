@@ -106,7 +106,7 @@ tenant_user_info_data:
 #       username: ted
 
 # num_users: "{{ ocp4_workload_showroom_user_data_seed.users | length }}"
-num_users: 5
+num_users: 20
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_tenant_keycloak_user
@@ -261,6 +261,7 @@ ocp4_workload_gitlab_user_default_access_levels: ["developer","maintainer"]
 # -------------------------------------------------------------------
 ocp4_workload_tenant_gitlab_auth_mode: "{{ ocp4_workload_gitlab_auth_mode }}"
 ocp4_workload_tenant_gitlab_username: "{{ ocp4_workload_tenant_keycloak_username }}"
+ocp4_workload_tenant_gitlab_password: "{{ ocp4_workload_tenant_keycloak_user_password }}"
 
 # -------------------------------------------------------------------
 # Workload: ocp4_workload_amq_streams
