@@ -134,13 +134,20 @@ ocp4_workload_tenant_namespace_suffixes:
         cpu: 250m
         memory: 256Mi
   - suffix: dev
+    limit_range:
+      default:
+        cpu: 250m
+        memory: 256Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 256Mi
   # - suffix: db
 
 ocp4_workload_tenant_namespace_default_quota:
-  limits.cpu: "4"
-  requests.cpu: "4"
-  limits.memory: 12Gi
-  requests.memory: 12Gi
+  limits.cpu: "6"
+  requests.cpu: "6"
+  limits.memory: 24Gi
+  requests.memory: 24Gi
   requests.storage: 50Gi
 
 # -------------------------------------------------------------------
