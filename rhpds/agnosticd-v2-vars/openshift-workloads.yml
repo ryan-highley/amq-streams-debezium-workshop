@@ -123,8 +123,22 @@ ocp4_workload_tenant_namespace_username: "{{ ocp4_workload_tenant_keycloak_usern
 # ocp4_workload_tenant_namespace_username: "user-{{ ocp4_workload_tenant_keycloak_username }}"
 
 ocp4_workload_tenant_namespace_suffixes:
-  # - suffix: tenant-comm-debezium
+  - suffix: tenant-comm-debezium
+    limit_range:
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 256Mi
   - suffix: tenant-comm-kafka
+    limit_range:
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 256Mi
   - suffix: showroom
     limit_range:
       default:
@@ -141,7 +155,14 @@ ocp4_workload_tenant_namespace_suffixes:
       defaultRequest:
         cpu: 250m
         memory: 256Mi
-  # - suffix: db
+  - suffix: db
+    limit_range:
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 256Mi
 
 ocp4_workload_tenant_namespace_default_quota:
   limits.cpu: "6"
@@ -196,6 +217,26 @@ ocp4_workload_tenant_argocd_app_helm_values:
               cpu:
                 request: 20m
                 limits: 250m
+
+    - name: "{{ ocp4_workload_tenant_argocd_app_user }}-kafka-console"
+      repoURL: "{{ workshop_gitops_repo_url }}"
+      revision: "{{ workshop_gitops_repo_revision }}"
+      path: deployments/kafka-console
+      chartName: kafka-console
+      destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom"
+      values:
+        hostname: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+
+        oidc:
+          authServerUrl: https://keycloak-service.keycloak.svc:8443/realms/{{ ocp4_workload_tenant_keycloak_user_keycloak_realm }}
+          clientId: kafka-console
+          clientSecret:
+            value: not-terribly-secure
+
+        kafkaClusters:
+          - name: btds-kafkacluster
+            namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+            listener: plain
 
     # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
     #   repoURL: "{{ workshop_gitops_repo_url }}"
@@ -324,8 +365,8 @@ ocp4_workload_showroom_content_ui_config: |
       secondary_port: 443
 
     # Kafka Console
-    # - name: Kafka Console
-    #   url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
+    - name: Kafka Console
+      url: https://kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
 
     # External page
     - name: Red Hat Documentation
