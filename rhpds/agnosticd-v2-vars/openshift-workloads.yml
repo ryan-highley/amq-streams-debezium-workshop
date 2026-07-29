@@ -296,6 +296,13 @@ ocp4_workload_tenant_argocd_app_helm_values:
       chartName: miscellaneous
       destinationNamespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
       values:
+        namespaces:
+          dev: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-dev"
+          db: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-db"
+          showroom: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-showroom"
+          kafka: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+          debezium: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-debezium"
+
         consoleLinks:
           - name: "{{ ocp4_workload_tenant_argocd_app_user }}-showroom"
             spec:

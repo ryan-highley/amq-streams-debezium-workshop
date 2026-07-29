@@ -1,4 +1,11 @@
 
+namespaces:
+  dev: dev
+  db: db
+  showroom: showroom
+  kafka: tenant-comm-kafka
+  debezium: tenant-comm-debezium
+
 consoleLinks:
   - name: showroom
     spec:
