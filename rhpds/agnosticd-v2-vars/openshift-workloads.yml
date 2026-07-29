@@ -235,11 +235,11 @@ ocp4_workload_tenant_argocd_app_helm_values:
       values:
         hostname: kafka-console-{{ ocp4_workload_tenant_keycloak_username }}-showroom.{{ openshift_cluster_ingress_domain }}
 
-        oidc:
-          authServerUrl: https://keycloak-service.keycloak.svc:8443/realms/{{ ocp4_workload_tenant_keycloak_user_keycloak_realm }}
-          clientId: kafka-console
-          clientSecret:
-            value: not-terribly-secure
+        # oidc:
+        #   authServerUrl: https://keycloak-service.keycloak.svc:8443/realms/{{ ocp4_workload_tenant_keycloak_user_keycloak_realm }}
+        #   clientId: kafka-console
+        #   clientSecret:
+        #     value: 5eCLnte71C6aAUVIx9EdGAtHRCR2G8PV
 
         kafkaClusters:
           - name: btds-kafkacluster

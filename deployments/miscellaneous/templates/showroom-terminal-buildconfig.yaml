@@ -1,0 +1,29 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: kafka-showroom-terminal
+spec: {}
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: kafka-showroom-terminal
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'kafka-showroom-terminal:latest'
+  strategy:
+    type: Docker
+    dockerStrategy: {}
+  source:
+    type: Dockerfile
+    dockerfile: |
+      FROM registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0 AS kafka
+
+      FROM quay.io/rhpds/openshift-showroom-terminal-ocp:latest
+
+      COPY --from=kafka /opt/kafka /opt/kafka
+
+      RUN tee -a /var/lab-user/bashrc.base <<<'export "PATH=$PATH:/opt/kafka/bin"'

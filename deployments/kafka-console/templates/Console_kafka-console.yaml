@@ -4,44 +4,44 @@ metadata:
   name: kafka-console
 spec:
   hostname: {{ .Values.hostname }}
-  security:
-    {{- with .Values.oidc }}
-    oidc:
-      {{ toYaml . | nindent 6 }}
-      trustStore:
-        type: PEM
-        content:
-          valueFrom:
-            configMapKeyRef:
-              name: keycloak-tls
-              key: service-ca.crt
-    {{- end }}
-    subjects:
-      - include:
-          - admin
-        roleNames:
-          - administrators
-      - include:
-          - developer
-        roleNames:
-          - developers
-    roles:
-      - name: developers
-        rules:
-          - resources:
-              - kafkas
-            resourceNames:
-              - '*'
-            privileges:
-              - 'ALL'
-      - name: administrators
-        rules:
-          - resources:
-              - kafkas
-            resourceNames:
-              - '*'
-            privileges:
-              - 'ALL'
+  # security:
+  #   {{- with .Values.oidc }}
+  #   oidc:
+  #     {{ toYaml . | nindent 6 }}
+  #     trustStore:
+  #       type: PEM
+  #       content:
+  #         valueFrom:
+  #           configMapKeyRef:
+  #             name: keycloak-tls
+  #             key: service-ca.crt
+  #   {{- end }}
+    # subjects:
+    #   - include:
+    #       - admin
+    #     roleNames:
+    #       - administrators
+    #   - include:
+    #       - developer
+    #     roleNames:
+    #       - developers
+    # roles:
+    #   - name: developers
+    #     rules:
+    #       - resources:
+    #           - kafkas
+    #         resourceNames:
+    #           - '*'
+    #         privileges:
+    #           - 'ALL'
+    #   - name: administrators
+    #     rules:
+    #       - resources:
+    #           - kafkas
+    #         resourceNames:
+    #           - '*'
+    #         privileges:
+    #           - 'ALL'
 {{- with .Values.kafkaClusters }}
   kafkaClusters:
     {{ toYaml . | nindent 4 }}
