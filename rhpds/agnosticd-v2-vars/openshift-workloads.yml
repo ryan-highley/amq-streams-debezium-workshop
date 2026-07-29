@@ -209,8 +209,14 @@ ocp4_workload_tenant_argocd_app_helm_values:
           image: registry.redhat.io/amq-streams/kafka-42-rhel9:3.2.0
           localcluster:
             namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
+            offsets: 3
+            default: 3
+            insync: 2
+            transreplication: 3
+            translogmin: 2
           nodepool:
             broker:
+              replicas: 3
               cpu:
                 request: 20m
                 limits: 250m
