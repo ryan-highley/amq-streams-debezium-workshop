@@ -252,6 +252,22 @@ ocp4_workload_tenant_argocd_app_helm_values:
             namespace: "{{ ocp4_workload_tenant_argocd_app_deploy_namespace_base }}-tenant-comm-kafka"
             listener: plain
 
+        containers:
+          api:
+            spec:
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 500m
+                  memory: 512Mi
+
+        metricsSources:
+          - name: ocp-prometheus
+            type: openshift-monitoring
+
+
     # - name: "{{ ocp4_workload_tenant_argocd_app_user }}-mssql-db"
     #   repoURL: "{{ workshop_gitops_repo_url }}"
     #   revision: "{{ workshop_gitops_repo_revision }}"
